@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hamptons Apps — Turnover</title>
+  <meta name="description" content="Turnover is a cleaning management app built for short-term rental hosts and their cleaners." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ocean: #2C4A5A;
+      --ocean-light: #3a5f73;
+      --driftwood: #C4A882;
+      --driftwood-light: #d9c4a8;
+      --sand: #F5F0E8;
+      --white: #ffffff;
+      --text: #1a2e38;
+      --muted: #6b7f88;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--sand);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2.5rem;
+      background: rgba(44, 74, 90, 0.96);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      font-size: 1.4rem;
+    }
+
+    .nav-logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--driftwood);
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 400;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--driftwood); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      background: var(--ocean);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 40px,
+        rgba(196,168,130,0.04) 40px,
+        rgba(196,168,130,0.04) 41px
+      );
+    }
+
+    .hero-eyebrow {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--driftwood);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.2s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1.05;
+      margin-bottom: 0.4rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.4s forwards;
+    }
+
+    .hero-title span {
+      color: var(--driftwood);
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: rgba(255,255,255,0.65);
+      max-width: 520px;
+      margin: 1.5rem auto 2.5rem;
+      font-weight: 300;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.6s forwards;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--driftwood);
+      color: var(--ocean);
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.85rem 2rem;
+      border-radius: 100px;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: background 0.2s, transform 0.2s;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.8s forwards;
+    }
+
+    .hero-cta:hover {
+      background: var(--driftwood-light);
+      transform: translateY(-2px);
+    }
+
+    .hero-divider {
+      width: 48px;
+      height: 3px;
+      background: var(--driftwood);
+      border-radius: 2px;
+      margin: 2rem auto 0;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 1s forwards;
+    }
+
+    /* ── APP SECTION ── */
+    .app-section {
+      padding: 6rem 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--driftwood);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      color: var(--ocean);
+      margin-bottom: 1.2rem;
+      line-height: 1.2;
+    }
+
+    .section-body {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto 3rem;
+      font-weight: 300;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      text-align: left;
+    }
+
+    .feature-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 2rem;
+      border: 1px solid rgba(44,74,90,0.08);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(44,74,90,0.12);
+    }
+
+    .feature-icon {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--ocean);
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── PRICING ── */
+    .pricing-section {
+      background: var(--ocean);
+      padding: 6rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pricing-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 40px,
+        rgba(196,168,130,0.04) 40px,
+        rgba(196,168,130,0.04) 41px
+      );
+    }
+
+    .pricing-section .section-title { color: var(--white); }
+    .pricing-section .section-label { color: var(--driftwood); }
+    .pricing-section .section-body { color: rgba(255,255,255,0.6); }
+
+    .pricing-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(196,168,130,0.3);
+      border-radius: 20px;
+      padding: 3rem 2.5rem;
+      max-width: 400px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .pricing-amount {
+      font-family: 'Playfair Display', serif;
+      font-size: 4rem;
+      font-weight: 900;
+      color: var(--driftwood);
+      line-height: 1;
+    }
+
+    .pricing-amount sup {
+      font-size: 1.5rem;
+      vertical-align: super;
+    }
+
+    .pricing-period {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.9rem;
+      margin-top: 0.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .pricing-features {
+      list-style: none;
+      text-align: left;
+      margin-bottom: 2rem;
+    }
+
+    .pricing-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.95rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .pricing-features li:last-child { border-bottom: none; }
+
+    .pricing-features li::before {
+      content: '✓';
+      color: var(--driftwood);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .pricing-note {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.4);
+      margin-top: 1rem;
+    }
+
+    /* ── SUPPORT ── */
+    .support-section {
+      padding: 6rem 2rem;
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .support-card {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 3rem;
+      border: 1px solid rgba(44,74,90,0.08);
+    }
+
+    .support-card p {
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+    }
+
+    .support-email {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--ocean);
+      color: var(--white);
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 0.85rem 2rem;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .support-email:hover {
+      background: var(--ocean-light);
+      transform: translateY(-2px);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ocean);
+      padding: 2.5rem;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      color: var(--driftwood);
+      font-size: 1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      list-style: none;
+      margin-bottom: 1rem;
+    }
+
+    .footer-links a {
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--driftwood); }
+
+    .footer-copy {
+      color: rgba(255,255,255,0.3);
+      font-size: 0.8rem;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      nav { padding: 1rem 1.25rem; }
+      .nav-links { display: none; }
+      .hero { padding: 7rem 1.5rem 4rem; }
+      .app-section, .support-section { padding: 4rem 1.5rem; }
+      .support-card { padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <span class="nav-logo-icon">🏠</span>
+      <span class="nav-logo-text">Hamptons Apps</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#app">Turnover</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#support">Support</a></li>
+      <li><a href="privacy.html">Privacy</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="hero-eyebrow">Hamptons Apps</p>
+    <h1 class="hero-title">Meet <span>Turnover</span></h1>
+    <p class="hero-subtitle">The cleaning management app built for short-term rental hosts and their cleaners.</p>
+    <a href="#app" class="hero-cta">Learn more ↓</a>
+    <div class="hero-divider"></div>
+  </section>
+
+  <!-- APP -->
+  <section class="app-section" id="app">
+    <p class="section-label">Turnover App</p>
+    <h2 class="section-title">Every clean, perfectly coordinated</h2>
+    <p class="section-body">Hosts set up properties and monitor cleans in real time. Cleaners execute room-by-room checklists, submit photos, and flag damage — all in one app.</p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📋</div>
+        <div class="feature-title">Room-by-room checklists</div>
+        <div class="feature-desc">Custom tasks per room with priority levels. Cleaners check off as they go — nothing gets missed.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📸</div>
+        <div class="feature-title">Photo documentation</div>
+        <div class="feature-desc">Cleaners submit photos for every room. Hosts can review them anytime from session history.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚠️</div>
+        <div class="feature-title">Instant damage reports</div>
+        <div class="feature-desc">Cleaners flag damage with a photo and severity level. Hosts are notified immediately.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">Live progress tracking</div>
+        <div class="feature-desc">Watch every clean unfold in real time. See which rooms are done and what's left.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💬</div>
+        <div class="feature-title">Built-in messaging</div>
+        <div class="feature-desc">Hosts and cleaners communicate per property — no more texts lost in a thread.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📅</div>
+        <div class="feature-title">Scheduled cleans</div>
+        <div class="feature-desc">Schedule one-time or recurring cleans. Cleaners always know what's coming up.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing-section" id="pricing">
+    <p class="section-label">Simple pricing</p>
+    <h2 class="section-title">One plan. No surprises.</h2>
+    <p class="section-body">Whoever initiates the relationship pays. The other side gets free access.</p>
+
+    <div class="pricing-card">
+      <div class="pricing-amount"><sup>$</sup>4.99</div>
+      <div class="pricing-period">per month · 14-day free trial</div>
+      <ul class="pricing-features">
+        <li>Unlimited properties</li>
+        <li>Unlimited cleans and history</li>
+        <li>Room photos and damage reports</li>
+        <li>Real-time live progress</li>
+        <li>Scheduled and recurring cleans</li>
+        <li>In-app messaging</li>
+        <li>Cleaner gets free access</li>
+      </ul>
+      <p class="pricing-note">After trial, unpaid accounts switch to read-only mode.</p>
+    </div>
+  </section>
+
+  <!-- SUPPORT -->
+  <section class="support-section" id="support">
+    <p class="section-label">Support</p>
+    <h2 class="section-title">We're here to help</h2>
+    <div class="support-card">
+      <p>Have a question about Turnover? Reach out and we'll get back to you as soon as possible.</p>
+      <a href="mailto:support@hamptonsapps.com" class="support-email">✉️ &nbsp;support@hamptonsapps.com</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Hamptons Apps</div>
+    <ul class="footer-links">
+      <li><a href="#app">Turnover</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#support">Support</a></li>
+      <li><a href="privacy.html">Privacy Policy</a></li>
+    </ul>
+    <p class="footer-copy">&copy; 2026 Hamptons Apps. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — Turnover by Hamptons Apps</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ocean: #2C4A5A;
+      --driftwood: #C4A882;
+      --sand: #F5F0E8;
+      --white: #ffffff;
+      --text: #1a2e38;
+      --muted: #6b7f88;
+    }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--sand);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2.5rem;
+      background: var(--ocean);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      color: var(--driftwood);
+      text-decoration: none;
+      font-size: 1.1rem;
+    }
+    .nav-back {
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--driftwood); }
+
+    .container {
+      max-width: 740px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
+    }
+    .page-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--driftwood);
+      margin-bottom: 0.75rem;
+    }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--ocean);
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
+    .effective-date {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid rgba(44,74,90,0.1);
+    }
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--ocean);
+      margin: 2.5rem 0 0.75rem;
+    }
+    p {
+      color: var(--muted);
+      margin-bottom: 1rem;
+      font-size: 0.97rem;
+    }
+    ul {
+      color: var(--muted);
+      padding-left: 1.5rem;
+      margin-bottom: 1rem;
+      font-size: 0.97rem;
+    }
+    ul li { margin-bottom: 0.4rem; }
+    a { color: var(--ocean); }
+
+    footer {
+      background: var(--ocean);
+      padding: 2rem;
+      text-align: center;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.8rem;
+    }
+    footer span { color: var(--driftwood); }
+
+    @media (max-width: 600px) {
+      nav { padding: 1rem 1.25rem; }
+      .container { padding: 2.5rem 1.25rem 4rem; }
+      h1 { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">🏠 Hamptons Apps</a>
+    <a href="index.html" class="nav-back">← Back</a>
+  </nav>
+
+  <div class="container">
+    <p class="page-label">Legal</p>
+    <h1>Privacy Policy</h1>
+    <p class="effective-date">Effective date: April 3, 2026 · Applies to the Turnover iOS app</p>
+
+    <h2>1. Who We Are</h2>
+    <p>Turnover is developed and operated by Hamptons Apps, an independent software developer based in New York. You can reach us at <a href="mailto:support@hamptonsapps.com">support@hamptonsapps.com</a>.</p>
+
+    <h2>2. Information We Collect</h2>
+    <p>We collect information you provide directly when you use the app:</p>
+    <ul>
+      <li>Account information: first name, last name, email address, and role (Host or Cleaner)</li>
+      <li>Property information: address, room configurations, tasks, supplies, and inspection items</li>
+      <li>Clean session data: task completion status, photos, damage reports, and timestamps</li>
+      <li>Messages exchanged between hosts and cleaners within the app</li>
+      <li>Photos uploaded during cleaning sessions or damage reports</li>
+    </ul>
+    <p>We also collect certain information automatically:</p>
+    <ul>
+      <li>Device type and operating system (via Firebase)</li>
+      <li>App usage data and crash reports (via Firebase Analytics and Crashlytics)</li>
+      <li>Firebase Authentication tokens for session management</li>
+    </ul>
+
+    <h2>3. How We Use Your Information</h2>
+    <p>We use the information we collect to:</p>
+    <ul>
+      <li>Create and manage your account</li>
+      <li>Enable hosts and cleaners to coordinate cleaning sessions</li>
+      <li>Store and display property configurations, checklists, and session history</li>
+      <li>Deliver in-app messages between hosts and cleaners</li>
+      <li>Send push notifications about clean status updates and messages</li>
+      <li>Improve app performance and fix bugs</li>
+      <li>Process subscription payments (via Apple's in-app purchase system)</li>
+    </ul>
+
+    <h2>4. Data Storage</h2>
+    <p>Your data is stored securely using Google Firebase (Firestore and Firebase Storage), hosted in the United States. Photos are stored in Firebase Storage and are accessible only to the host and assigned cleaner of the relevant property.</p>
+
+    <h2>5. Data Sharing</h2>
+    <p>We do not sell your personal information. We share data only in the following limited circumstances:</p>
+    <ul>
+      <li><strong>Between host and cleaner:</strong> Property details, session data, photos, damage reports, and messages are shared between the host and their assigned cleaner for the purpose of coordinating cleans.</li>
+      <li><strong>Service providers:</strong> We use Google Firebase for database, storage, and authentication services. We use Apple's StoreKit for subscription processing.</li>
+      <li><strong>Legal requirements:</strong> We may disclose information if required by law or to protect the rights and safety of our users.</li>
+    </ul>
+
+    <h2>6. Photos and Media</h2>
+    <p>Photos uploaded through the app (room photos and damage reports) are stored in Firebase Storage and associated with the specific property and clean session. These photos are accessible to the host and assigned cleaner of that property. You may delete photos from within the app at any time.</p>
+
+    <h2>7. Data Retention</h2>
+    <p>We retain your account data for as long as your account is active. Clean session history, photos, and damage reports are retained until you delete them or your account is deleted. You may request deletion of your account and associated data by contacting us at <a href="mailto:support@hamptonsapps.com">support@hamptonsapps.com</a>.</p>
+
+    <h2>8. Your Rights</h2>
+    <p>You have the right to:</p>
+    <ul>
+      <li>Access the personal information we hold about you</li>
+      <li>Request correction of inaccurate information</li>
+      <li>Request deletion of your account and data</li>
+      <li>Withdraw consent for push notifications via your device settings</li>
+    </ul>
+    <p>To exercise these rights, contact us at <a href="mailto:support@hamptonsapps.com">support@hamptonsapps.com</a>.</p>
+
+    <h2>9. Children's Privacy</h2>
+    <p>Turnover is not directed at children under 13. We do not knowingly collect personal information from children under 13. If you believe we have inadvertently collected such information, please contact us immediately.</p>
+
+    <h2>10. Security</h2>
+    <p>We implement industry-standard security measures including Firebase security rules, encrypted data transmission (HTTPS/TLS), and Firebase Authentication to protect your information. However, no method of transmission over the internet is 100% secure.</p>
+
+    <h2>11. Third-Party Services</h2>
+    <p>The app uses the following third-party services, each with their own privacy policies:</p>
+    <ul>
+      <li>Google Firebase (Firestore, Storage, Authentication, Analytics) — <a href="https://firebase.google.com/support/privacy" target="_blank">firebase.google.com/support/privacy</a></li>
+      <li>Google Sign-In — <a href="https://policies.google.com/privacy" target="_blank">policies.google.com/privacy</a></li>
+      <li>Apple StoreKit (in-app purchases) — <a href="https://www.apple.com/legal/privacy/" target="_blank">apple.com/legal/privacy</a></li>
+    </ul>
+
+    <h2>12. Changes to This Policy</h2>
+    <p>We may update this privacy policy from time to time. We will notify you of significant changes by updating the effective date above. Continued use of the app after changes constitutes acceptance of the updated policy.</p>
+
+    <h2>13. Contact Us</h2>
+    <p>If you have any questions about this privacy policy or your data, please contact us:</p>
+    <ul>
+      <li>Email: <a href="mailto:support@hamptonsapps.com">support@hamptonsapps.com</a></li>
+      <li>Website: <a href="https://hamptonsapps.com">hamptonsapps.com</a></li>
+    </ul>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 <span>Hamptons Apps</span>. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
