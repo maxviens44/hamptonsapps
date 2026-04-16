@@ -1,540 +1,577 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hamptons Apps — Turnover</title>
-  <meta name="description" content="Turnover is a cleaning management app built for short-term rental hosts and their cleaners." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --ocean: #2C4A5A;
-      --ocean-light: #3a5f73;
-      --driftwood: #C4A882;
-      --driftwood-light: #d9c4a8;
-      --sand: #F5F0E8;
-      --white: #ffffff;
-      --text: #1a2e38;
-      --muted: #6b7f88;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--sand);
-      color: var(--text);
-      line-height: 1.6;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.2rem 2.5rem;
-      background: rgba(44, 74, 90, 0.96);
-      backdrop-filter: blur(12px);
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
-    }
-
-    .nav-logo-icon {
-      font-size: 1.4rem;
-    }
-
-    .nav-logo-text {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.1rem;
-      color: var(--driftwood);
-      letter-spacing: 0.02em;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: rgba(255,255,255,0.7);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 400;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover { color: var(--driftwood); }
-
-    /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
-      background: var(--ocean);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 8rem 2rem 5rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: repeating-linear-gradient(
-        -45deg,
-        transparent,
-        transparent 40px,
-        rgba(196,168,130,0.04) 40px,
-        rgba(196,168,130,0.04) 41px
-      );
-    }
-
-    .hero-eyebrow {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 500;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--driftwood);
-      margin-bottom: 1.5rem;
-      opacity: 0;
-      animation: fadeUp 0.8s ease 0.2s forwards;
-    }
-
-    .hero-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(3rem, 8vw, 5.5rem);
-      font-weight: 900;
-      color: var(--white);
-      line-height: 1.05;
-      margin-bottom: 0.4rem;
-      opacity: 0;
-      animation: fadeUp 0.8s ease 0.4s forwards;
-    }
-
-    .hero-title span {
-      color: var(--driftwood);
-    }
-
-    .hero-subtitle {
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-      color: rgba(255,255,255,0.65);
-      max-width: 520px;
-      margin: 1.5rem auto 2.5rem;
-      font-weight: 300;
-      opacity: 0;
-      animation: fadeUp 0.8s ease 0.6s forwards;
-    }
-
-    .hero-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--driftwood);
-      color: var(--ocean);
-      font-weight: 600;
-      font-size: 0.95rem;
-      padding: 0.85rem 2rem;
-      border-radius: 100px;
-      text-decoration: none;
-      letter-spacing: 0.02em;
-      transition: background 0.2s, transform 0.2s;
-      opacity: 0;
-      animation: fadeUp 0.8s ease 0.8s forwards;
-    }
-
-    .hero-cta:hover {
-      background: var(--driftwood-light);
-      transform: translateY(-2px);
-    }
-
-    .hero-divider {
-      width: 48px;
-      height: 3px;
-      background: var(--driftwood);
-      border-radius: 2px;
-      margin: 2rem auto 0;
-      opacity: 0;
-      animation: fadeUp 0.8s ease 1s forwards;
-    }
-
-    /* ── APP SECTION ── */
-    .app-section {
-      padding: 6rem 2rem;
-      max-width: 900px;
-      margin: 0 auto;
-      text-align: center;
-    }
-
-    .section-label {
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--driftwood);
-      margin-bottom: 1rem;
-    }
-
-    .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 5vw, 3rem);
-      font-weight: 700;
-      color: var(--ocean);
-      margin-bottom: 1.2rem;
-      line-height: 1.2;
-    }
-
-    .section-body {
-      font-size: 1.05rem;
-      color: var(--muted);
-      max-width: 600px;
-      margin: 0 auto 3rem;
-      font-weight: 300;
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 1.5rem;
-      text-align: left;
-    }
-
-    .feature-card {
-      background: var(--white);
-      border-radius: 16px;
-      padding: 2rem;
-      border: 1px solid rgba(44,74,90,0.08);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .feature-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px rgba(44,74,90,0.12);
-    }
-
-    .feature-icon {
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
-    }
-
-    .feature-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--ocean);
-      margin-bottom: 0.5rem;
-    }
-
-    .feature-desc {
-      font-size: 0.9rem;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    /* ── PRICING ── */
-    .pricing-section {
-      background: var(--ocean);
-      padding: 6rem 2rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .pricing-section::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: repeating-linear-gradient(
-        -45deg,
-        transparent,
-        transparent 40px,
-        rgba(196,168,130,0.04) 40px,
-        rgba(196,168,130,0.04) 41px
-      );
-    }
-
-    .pricing-section .section-title { color: var(--white); }
-    .pricing-section .section-label { color: var(--driftwood); }
-    .pricing-section .section-body { color: rgba(255,255,255,0.6); }
-
-    .pricing-card {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(196,168,130,0.3);
-      border-radius: 20px;
-      padding: 3rem 2.5rem;
-      max-width: 400px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
-    }
-
-    .pricing-amount {
-      font-family: 'Playfair Display', serif;
-      font-size: 4rem;
-      font-weight: 900;
-      color: var(--driftwood);
-      line-height: 1;
-    }
-
-    .pricing-amount sup {
-      font-size: 1.5rem;
-      vertical-align: super;
-    }
-
-    .pricing-period {
-      color: rgba(255,255,255,0.5);
-      font-size: 0.9rem;
-      margin-top: 0.25rem;
-      margin-bottom: 2rem;
-    }
-
-    .pricing-features {
-      list-style: none;
-      text-align: left;
-      margin-bottom: 2rem;
-    }
-
-    .pricing-features li {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
-      color: rgba(255,255,255,0.8);
-      font-size: 0.95rem;
-      padding: 0.5rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .pricing-features li:last-child { border-bottom: none; }
-
-    .pricing-features li::before {
-      content: '✓';
-      color: var(--driftwood);
-      font-weight: 700;
-      flex-shrink: 0;
-      margin-top: 0.1rem;
-    }
-
-    .pricing-note {
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.4);
-      margin-top: 1rem;
-    }
-
-    /* ── SUPPORT ── */
-    .support-section {
-      padding: 6rem 2rem;
-      max-width: 700px;
-      margin: 0 auto;
-      text-align: center;
-    }
-
-    .support-card {
-      background: var(--white);
-      border-radius: 20px;
-      padding: 3rem;
-      border: 1px solid rgba(44,74,90,0.08);
-    }
-
-    .support-card p {
-      color: var(--muted);
-      margin-bottom: 1.5rem;
-      font-size: 1rem;
-    }
-
-    .support-email {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--ocean);
-      color: var(--white);
-      font-weight: 500;
-      font-size: 0.95rem;
-      padding: 0.85rem 2rem;
-      border-radius: 100px;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.2s;
-    }
-
-    .support-email:hover {
-      background: var(--ocean-light);
-      transform: translateY(-2px);
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--ocean);
-      padding: 2.5rem;
-      text-align: center;
-    }
-
-    .footer-logo {
-      font-family: 'Playfair Display', serif;
-      color: var(--driftwood);
-      font-size: 1rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      list-style: none;
-      margin-bottom: 1rem;
-    }
-
-    .footer-links a {
-      color: rgba(255,255,255,0.5);
-      text-decoration: none;
-      font-size: 0.85rem;
-      transition: color 0.2s;
-    }
-
-    .footer-links a:hover { color: var(--driftwood); }
-
-    .footer-copy {
-      color: rgba(255,255,255,0.3);
-      font-size: 0.8rem;
-    }
-
-    /* ── ANIMATIONS ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 600px) {
-      nav { padding: 1rem 1.25rem; }
-      .nav-links { display: none; }
-      .hero { padding: 7rem 1.5rem 4rem; }
-      .app-section, .support-section { padding: 4rem 1.5rem; }
-      .support-card { padding: 2rem 1.5rem; }
-    }
-  </style>
-</head>
-<body>
-
-  <!-- NAV -->
-  <nav>
-    <a href="#" class="nav-logo">
-      <span class="nav-logo-icon">🏠</span>
-      <span class="nav-logo-text">Hamptons Apps</span>
-    </a>
-    <ul class="nav-links">
-      <li><a href="#app">Turnover</a></li>
-      <li><a href="#pricing">Pricing</a></li>
-      <li><a href="#support">Support</a></li>
-      <li><a href="privacy.html">Privacy</a></li>
-    </ul>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero">
-    <p class="hero-eyebrow">Hamptons Apps</p>
-    <h1 class="hero-title">Meet <span>Turnover</span></h1>
-    <p class="hero-subtitle">The cleaning management app built for short-term rental hosts and their cleaners.</p>
-    <a href="#app" class="hero-cta">Learn more ↓</a>
-    <div class="hero-divider"></div>
-  </section>
-
-  <!-- APP -->
-  <section class="app-section" id="app">
-    <p class="section-label">Turnover App</p>
-    <h2 class="section-title">Every clean, perfectly coordinated</h2>
-    <p class="section-body">Hosts set up properties and monitor cleans in real time. Cleaners execute room-by-room checklists, submit photos, and flag damage — all in one app.</p>
-
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon">📋</div>
-        <div class="feature-title">Room-by-room checklists</div>
-        <div class="feature-desc">Custom tasks per room with priority levels. Cleaners check off as they go — nothing gets missed.</div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">📸</div>
-        <div class="feature-title">Photo documentation</div>
-        <div class="feature-desc">Cleaners submit photos for every room. Hosts can review them anytime from session history.</div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">⚠️</div>
-        <div class="feature-title">Instant damage reports</div>
-        <div class="feature-desc">Cleaners flag damage with a photo and severity level. Hosts are notified immediately.</div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">📊</div>
-        <div class="feature-title">Live progress tracking</div>
-        <div class="feature-desc">Watch every clean unfold in real time. See which rooms are done and what's left.</div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">💬</div>
-        <div class="feature-title">Built-in messaging</div>
-        <div class="feature-desc">Hosts and cleaners communicate per property — no more texts lost in a thread.</div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">📅</div>
-        <div class="feature-title">Scheduled cleans</div>
-        <div class="feature-desc">Schedule one-time or recurring cleans. Cleaners always know what's coming up.</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PRICING -->
-  <section class="pricing-section" id="pricing">
-    <p class="section-label">Simple pricing</p>
-    <h2 class="section-title">One plan. No surprises.</h2>
-    <p class="section-body">Whoever initiates the relationship pays. The other side gets free access.</p>
-
-    <div class="pricing-card">
-      <div class="pricing-amount"><sup>$</sup>4.99</div>
-      <div class="pricing-period">per month · 14-day free trial</div>
-      <ul class="pricing-features">
-        <li>Unlimited properties</li>
-        <li>Unlimited cleans and history</li>
-        <li>Room photos and damage reports</li>
-        <li>Real-time live progress</li>
-        <li>Scheduled and recurring cleans</li>
-        <li>In-app messaging</li>
-        <li>Cleaner gets free access</li>
-      </ul>
-      <p class="pricing-note">After trial, unpaid accounts switch to read-only mode.</p>
-    </div>
-  </section>
-
-  <!-- SUPPORT -->
-  <section class="support-section" id="support">
-    <p class="section-label">Support</p>
-    <h2 class="section-title">We're here to help</h2>
-    <div class="support-card">
-      <p>Have a question about Turnover? Reach out and we'll get back to you as soon as possible.</p>
-      <a href="mailto:support@hamptonsapps.com" class="support-email">✉️ &nbsp;support@hamptonsapps.com</a>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-logo">Hamptons Apps</div>
-    <ul class="footer-links">
-      <li><a href="#app">Turnover</a></li>
-      <li><a href="#pricing">Pricing</a></li>
-      <li><a href="#support">Support</a></li>
-      <li><a href="privacy.html">Privacy Policy</a></li>
-    </ul>
-    <p class="footer-copy">&copy; 2026 Hamptons Apps. All rights reserved.</p>
-  </footer>
-
-</body>
-</html>
+    1 <!DOCTYPE html>
+    2 <html lang="en">
+    3 <head>
+    4   <meta charset="UTF-8" />
+    5   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    6   <title>Hamptons Apps — Turnover</title>
+    7   <meta name="description" content="Turnover is a cleaning management app built for short-term rental hosts and their cleaners." />
+    8   <link rel="preconnect" href="https://fonts.googleapis.com" />
+    9   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+   10   <style>
+   11     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+   12
+   13     :root {
+   14       --ocean: #2C4A5A;
+   15       --ocean-light: #3a5f73;
+   16       --driftwood: #C4A882;
+   17       --driftwood-light: #d9c4a8;
+   18       --sand: #F5F0E8;
+   19       --white: #ffffff;
+   20       --text: #1a2e38;
+   21       --muted: #6b7f88;
+   22     }
+   23
+   24     html { scroll-behavior: smooth; }
+   25
+   26     body {
+   27       font-family: 'DM Sans', sans-serif;
+   28       background: var(--sand);
+   29       color: var(--text);
+   30       line-height: 1.6;
+   31     }
+   32
+   33     /* ── NAV ── */
+   34     nav {
+   35       position: fixed;
+   36       top: 0; left: 0; right: 0;
+   37       z-index: 100;
+   38       display: flex;
+   39       align-items: center;
+   40       justify-content: space-between;
+   41       padding: 1.2rem 2.5rem;
+   42       background: rgba(44, 74, 90, 0.96);
+   43       backdrop-filter: blur(12px);
+   44     }
+   45
+   46     .nav-logo {
+   47       display: flex;
+   48       align-items: center;
+   49       gap: 0.6rem;
+   50       text-decoration: none;
+   51     }
+   52
+   53     .nav-logo-icon {
+   54       font-size: 1.4rem;
+   55     }
+   56
+   57     .nav-logo-text {
+   58       font-family: 'Playfair Display', serif;
+   59       font-size: 1.1rem;
+   60       color: var(--driftwood);
+   61       letter-spacing: 0.02em;
+   62     }
+   63
+   64     .nav-links {
+   65       display: flex;
+   66       gap: 2rem;
+   67       list-style: none;
+   68     }
+   69
+   70     .nav-links a {
+   71       color: rgba(255,255,255,0.7);
+   72       text-decoration: none;
+   73       font-size: 0.9rem;
+   74       font-weight: 400;
+   75       transition: color 0.2s;
+   76     }
+   77
+   78     .nav-links a:hover { color: var(--driftwood); }
+   79
+   80     /* ── HERO ── */
+   81     .hero {
+   82       min-height: 100vh;
+   83       background: var(--ocean);
+   84       display: flex;
+   85       flex-direction: column;
+   86       align-items: center;
+   87       justify-content: center;
+   88       text-align: center;
+   89       padding: 8rem 2rem 5rem;
+   90       position: relative;
+   91       overflow: hidden;
+   92     }
+   93
+   94     .hero::before {
+   95       content: '';
+   96       position: absolute;
+   97       inset: 0;
+   98       background-image: repeating-linear-gradient(
+   99         -45deg,
+  100         transparent,
+  101         transparent 40px,
+  102         rgba(196,168,130,0.04) 40px,
+  103         rgba(196,168,130,0.04) 41px
+  104       );
+  105     }
+  106
+  107     .hero-eyebrow {
+  108       font-family: 'DM Sans', sans-serif;
+  109       font-size: 0.8rem;
+  110       font-weight: 500;
+  111       letter-spacing: 0.2em;
+  112       text-transform: uppercase;
+  113       color: var(--driftwood);
+  114       margin-bottom: 1.5rem;
+  115       opacity: 0;
+  116       animation: fadeUp 0.8s ease 0.2s forwards;
+  117     }
+  118
+  119     .hero-title {
+  120       font-family: 'Playfair Display', serif;
+  121       font-size: clamp(3rem, 8vw, 5.5rem);
+  122       font-weight: 900;
+  123       color: var(--white);
+  124       line-height: 1.05;
+  125       margin-bottom: 0.4rem;
+  126       opacity: 0;
+  127       animation: fadeUp 0.8s ease 0.4s forwards;
+  128     }
+  129
+  130     .hero-title span {
+  131       color: var(--driftwood);
+  132     }
+  133
+  134     .hero-subtitle {
+  135       font-size: clamp(1rem, 2.5vw, 1.25rem);
+  136       color: rgba(255,255,255,0.65);
+  137       max-width: 520px;
+  138       margin: 1.5rem auto 2.5rem;
+  139       font-weight: 300;
+  140       opacity: 0;
+  141       animation: fadeUp 0.8s ease 0.6s forwards;
+  142     }
+  143
+  144     .hero-cta {
+  145       display: inline-flex;
+  146       align-items: center;
+  147       gap: 0.5rem;
+  148       background: var(--driftwood);
+  149       color: var(--ocean);
+  150       font-weight: 600;
+  151       font-size: 0.95rem;
+  152       padding: 0.85rem 2rem;
+  153       border-radius: 100px;
+  154       text-decoration: none;
+  155       letter-spacing: 0.02em;
+  156       transition: background 0.2s, transform 0.2s;
+  157       opacity: 0;
+  158       animation: fadeUp 0.8s ease 0.8s forwards;
+  159     }
+  160
+  161     .hero-cta:hover {
+  162       background: var(--driftwood-light);
+  163       transform: translateY(-2px);
+  164     }
+  165
+  166     .hero-divider {
+  167       width: 48px;
+  168       height: 3px;
+  169       background: var(--driftwood);
+  170       border-radius: 2px;
+  171       margin: 2rem auto 0;
+  172       opacity: 0;
+  173       animation: fadeUp 0.8s ease 1s forwards;
+  174     }
+  175
+  176     /* ── APP SECTION ── */
+  177     .app-section {
+  178       padding: 6rem 2rem;
+  179       max-width: 900px;
+  180       margin: 0 auto;
+  181       text-align: center;
+  182     }
+  183
+  184     .section-label {
+  185       font-size: 0.75rem;
+  186       font-weight: 500;
+  187       letter-spacing: 0.2em;
+  188       text-transform: uppercase;
+  189       color: var(--driftwood);
+  190       margin-bottom: 1rem;
+  191     }
+  192
+  193     .section-title {
+  194       font-family: 'Playfair Display', serif;
+  195       font-size: clamp(2rem, 5vw, 3rem);
+  196       font-weight: 700;
+  197       color: var(--ocean);
+  198       margin-bottom: 1.2rem;
+  199       line-height: 1.2;
+  200     }
+  201
+  202     .section-body {
+  203       font-size: 1.05rem;
+  204       color: var(--muted);
+  205       max-width: 600px;
+  206       margin: 0 auto 3rem;
+  207       font-weight: 300;
+  208     }
+  209
+  210     .features-grid {
+  211       display: grid;
+  212       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  213       gap: 1.5rem;
+  214       text-align: left;
+  215     }
+  216
+  217     .feature-card {
+  218       background: var(--white);
+  219       border-radius: 16px;
+  220       padding: 2rem;
+  221       border: 1px solid rgba(44,74,90,0.08);
+  222       transition: transform 0.2s, box-shadow 0.2s;
+  223     }
+  224
+  225     .feature-card:hover {
+  226       transform: translateY(-4px);
+  227       box-shadow: 0 12px 40px rgba(44,74,90,0.12);
+  228     }
+  229
+  230     .feature-icon {
+  231       font-size: 1.8rem;
+  232       margin-bottom: 1rem;
+  233     }
+  234
+  235     .feature-title {
+  236       font-family: 'Playfair Display', serif;
+  237       font-size: 1.1rem;
+  238       font-weight: 700;
+  239       color: var(--ocean);
+  240       margin-bottom: 0.5rem;
+  241     }
+  242
+  243     .feature-desc {
+  244       font-size: 0.9rem;
+  245       color: var(--muted);
+  246       line-height: 1.6;
+  247     }
+  248
+  249     /* ── PRICING ── */
+  250     .pricing-section {
+  251       background: var(--ocean);
+  252       padding: 6rem 2rem;
+  253       text-align: center;
+  254       position: relative;
+  255       overflow: hidden;
+  256     }
+  257
+  258     .pricing-section::before {
+  259       content: '';
+  260       position: absolute;
+  261       inset: 0;
+  262       background-image: repeating-linear-gradient(
+  263         -45deg,
+  264         transparent,
+  265         transparent 40px,
+  266         rgba(196,168,130,0.04) 40px,
+  267         rgba(196,168,130,0.04) 41px
+  268       );
+  269     }
+  270
+  271     .pricing-section .section-title { color: var(--white); }
+  272     .pricing-section .section-label { color: var(--driftwood); }
+  273     .pricing-section .section-body { color: rgba(255,255,255,0.6); }
+  274
+  275     .pricing-grid {
+  276       display: grid;
+  277       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  278       gap: 1.25rem;
+  279       max-width: 900px;
+  280       margin: 0 auto;
+  281       position: relative;
+  282       z-index: 1;
+  283     }
+  284
+  285     .pricing-card {
+  286       background: rgba(255,255,255,0.06);
+  287       border: 1px solid rgba(196,168,130,0.3);
+  288       border-radius: 20px;
+  289       padding: 2rem 1.75rem;
+  290       text-align: left;
+  291       position: relative;
+  292     }
+  293
+  294     .pricing-card.featured {
+  295       border-color: var(--driftwood);
+  296       background: rgba(196,168,130,0.1);
+  297     }
+  298
+  299     .pricing-badge {
+  300       display: inline-block;
+  301       background: var(--driftwood);
+  302       color: var(--ocean);
+  303       font-size: 0.7rem;
+  304       font-weight: 700;
+  305       letter-spacing: 0.1em;
+  306       text-transform: uppercase;
+  307       padding: 0.25rem 0.75rem;
+  308       border-radius: 100px;
+  309       margin-bottom: 1rem;
+  310     }
+  311
+  312     .pricing-plan-name {
+  313       font-family: 'Playfair Display', serif;
+  314       font-size: 1.3rem;
+  315       font-weight: 700;
+  316       color: var(--white);
+  317       margin-bottom: 0.25rem;
+  318     }
+  319
+  320     .pricing-amount {
+  321       font-family: 'Playfair Display', serif;
+  322       font-size: 2.5rem;
+  323       font-weight: 900;
+  324       color: var(--driftwood);
+  325       line-height: 1;
+  326       margin-bottom: 0.15rem;
+  327     }
+  328
+  329     .pricing-amount sup {
+  330       font-size: 1rem;
+  331       vertical-align: super;
+  332     }
+  333
+  334     .pricing-period {
+  335       color: rgba(255,255,255,0.5);
+  336       font-size: 0.85rem;
+  337       margin-bottom: 1.25rem;
+  338     }
+  339
+  340     .pricing-limit {
+  341       font-size: 0.85rem;
+  342       color: rgba(255,255,255,0.7);
+  343       padding: 0.5rem 0;
+  344       border-top: 1px solid rgba(255,255,255,0.08);
+  345     }
+  346
+  347     .pricing-footer-note {
+  348       color: rgba(255,255,255,0.4);
+  349       font-size: 0.8rem;
+  350       margin-top: 2rem;
+  351       position: relative;
+  352       z-index: 1;
+  353     }
+  354
+  355     /* ── SUPPORT ── */
+  356     .support-section {
+  357       padding: 6rem 2rem;
+  358       max-width: 700px;
+  359       margin: 0 auto;
+  360       text-align: center;
+  361     }
+  362
+  363     .support-card {
+  364       background: var(--white);
+  365       border-radius: 20px;
+  366       padding: 3rem;
+  367       border: 1px solid rgba(44,74,90,0.08);
+  368     }
+  369
+  370     .support-card p {
+  371       color: var(--muted);
+  372       margin-bottom: 1.5rem;
+  373       font-size: 1rem;
+  374     }
+  375
+  376     .support-email {
+  377       display: inline-flex;
+  378       align-items: center;
+  379       gap: 0.5rem;
+  380       background: var(--ocean);
+  381       color: var(--white);
+  382       font-weight: 500;
+  383       font-size: 0.95rem;
+  384       padding: 0.85rem 2rem;
+  385       border-radius: 100px;
+  386       text-decoration: none;
+  387       transition: background 0.2s, transform 0.2s;
+  388     }
+  389
+  390     .support-email:hover {
+  391       background: var(--ocean-light);
+  392       transform: translateY(-2px);
+  393     }
+  394
+  395     /* ── FOOTER ── */
+  396     footer {
+  397       background: var(--ocean);
+  398       padding: 2.5rem;
+  399       text-align: center;
+  400     }
+  401
+  402     .footer-logo {
+  403       font-family: 'Playfair Display', serif;
+  404       color: var(--driftwood);
+  405       font-size: 1rem;
+  406       margin-bottom: 0.75rem;
+  407     }
+  408
+  409     .footer-links {
+  410       display: flex;
+  411       justify-content: center;
+  412       gap: 2rem;
+  413       list-style: none;
+  414       margin-bottom: 1rem;
+  415     }
+  416
+  417     .footer-links a {
+  418       color: rgba(255,255,255,0.5);
+  419       text-decoration: none;
+  420       font-size: 0.85rem;
+  421       transition: color 0.2s;
+  422     }
+  423
+  424     .footer-links a:hover { color: var(--driftwood); }
+  425
+  426     .footer-copy {
+  427       color: rgba(255,255,255,0.3);
+  428       font-size: 0.8rem;
+  429     }
+  430
+  431     /* ── ANIMATIONS ── */
+  432     @keyframes fadeUp {
+  433       from { opacity: 0; transform: translateY(20px); }
+  434       to   { opacity: 1; transform: translateY(0); }
+  435     }
+  436
+  437     /* ── RESPONSIVE ── */
+  438     @media (max-width: 600px) {
+  439       nav { padding: 1rem 1.25rem; }
+  440       .nav-links { display: none; }
+  441       .hero { padding: 7rem 1.5rem 4rem; }
+  442       .app-section, .support-section { padding: 4rem 1.5rem; }
+  443       .support-card { padding: 2rem 1.5rem; }
+  444       .pricing-grid { grid-template-columns: 1fr 1fr; }
+  445     }
+  446
+  447     @media (max-width: 400px) {
+  448       .pricing-grid { grid-template-columns: 1fr; }
+  449     }
+  450   </style>
+  451 </head>
+  452 <body>
+  453
+  454   <!-- NAV -->
+  455   <nav>
+  456     <a href="#" class="nav-logo">
+  457       <span class="nav-logo-icon">🏠</span>
+  458       <span class="nav-logo-text">Hamptons Apps</span>
+  459     </a>
+  460     <ul class="nav-links">
+  461       <li><a href="#app">Turnover</a></li>
+  462       <li><a href="#pricing">Pricing</a></li>
+  463       <li><a href="#support">Support</a></li>
+  464       <li><a href="privacy.html">Privacy</a></li>
+  465     </ul>
+  466   </nav>
+  467
+  468   <!-- HERO -->
+  469   <section class="hero">
+  470     <p class="hero-eyebrow">Hamptons Apps</p>
+  471     <h1 class="hero-title">Meet <span>Turnover</span></h1>
+  472     <p class="hero-subtitle">The cleaning management app built for short-term rental hosts and their cleaners.</p>
+  473     <a href="#app" class="hero-cta">Learn more ↓</a>
+  474     <div class="hero-divider"></div>
+  475   </section>
+  476
+  477   <!-- APP -->
+  478   <section class="app-section" id="app">
+  479     <p class="section-label">Turnover App</p>
+  480     <h2 class="section-title">Every clean, perfectly coordinated</h2>
+  481     <p class="section-body">Hosts set up properties and monitor cleans in real time. Cleaners execute room-by-room checklists, submit photos, and flag damage — all in one app.</p>
+  482
+  483     <div class="features-grid">
+  484       <div class="feature-card">
+  485         <div class="feature-icon">📋</div>
+  486         <div class="feature-title">Room-by-room checklists</div>
+  487         <div class="feature-desc">Custom tasks per room with priority levels. Cleaners check off as they go — nothing gets missed.</div>
+  488       </div>
+  489       <div class="feature-card">
+  490         <div class="feature-icon">📸</div>
+  491         <div class="feature-title">Photo documentation</div>
+  492         <div class="feature-desc">Cleaners submit photos for every room. Hosts can review them anytime from session history.</div>
+  493       </div>
+  494       <div class="feature-card">
+  495         <div class="feature-icon">⚠️ </div>
+  496         <div class="feature-title">Instant damage reports</div>
+  497         <div class="feature-desc">Cleaners flag damage with a photo and severity level. Hosts are notified immediately.</div>
+  498       </div>
+  499       <div class="feature-card">
+  500         <div class="feature-icon">📊</div>
+  501         <div class="feature-title">Live progress tracking</div>
+  502         <div class="feature-desc">Watch every clean unfold in real time. See which rooms are done and what's left.</div>
+  503       </div>
+  504       <div class="feature-card">
+  505         <div class="feature-icon">💬</div>
+  506         <div class="feature-title">Built-in messaging</div>
+  507         <div class="feature-desc">Hosts and cleaners communicate per property — no more texts lost in a thread.</div>
+  508       </div>
+  509       <div class="feature-card">
+  510         <div class="feature-icon">📅</div>
+  511         <div class="feature-title">Scheduled cleans</div>
+  512         <div class="feature-desc">Schedule one-time or recurring cleans. Cleaners always know what's coming up.</div>
+  513       </div>
+  514     </div>
+  515   </section>
+  516
+  517   <!-- PRICING -->
+  518   <section class="pricing-section" id="pricing">
+  519     <p class="section-label">Pricing</p>
+  520     <h2 class="section-title">Plans for every portfolio</h2>
+  521     <p class="section-body">Start with a 30-day free trial. Cleaners and crew always get free access.</p>
+  522
+  523     <div class="pricing-grid">
+  524       <div class="pricing-card">
+  525         <div class="pricing-plan-name">Starter</div>
+  526         <div class="pricing-amount"><sup>$</sup>4.99</div>
+  527         <div class="pricing-period">per month</div>
+  528         <div class="pricing-limit">Up to 2 properties</div>
+  529       </div>
+  530       <div class="pricing-card featured">
+  531         <div class="pricing-badge">Most Popular</div>
+  532         <div class="pricing-plan-name">Pro</div>
+  533         <div class="pricing-amount"><sup>$</sup>9.99</div>
+  534         <div class="pricing-period">per month</div>
+  535         <div class="pricing-limit">Up to 5 properties</div>
+  536       </div>
+  537       <div class="pricing-card">
+  538         <div class="pricing-plan-name">Portfolio</div>
+  539         <div class="pricing-amount"><sup>$</sup>19.99</div>
+  540         <div class="pricing-period">per month</div>
+  541         <div class="pricing-limit">Up to 10 properties</div>
+  542       </div>
+  543       <div class="pricing-card">
+  544         <div class="pricing-plan-name">Unlimited</div>
+  545         <div class="pricing-amount"><sup>$</sup>29.99</div>
+  546         <div class="pricing-period">per month</div>
+  547         <div class="pricing-limit">Unlimited properties</div>
+  548       </div>
+  549     </div>
+  550
+  551     <p class="pricing-footer-note">All plans include a 30-day free trial. Unlimited cleans, photos, damage reports, messaging, and scheduling included on every plan.</p>
+  552   </section>
+  553
+  554   <!-- SUPPORT -->
+  555   <section class="support-section" id="support">
+  556     <p class="section-label">Support</p>
+  557     <h2 class="section-title">We're here to help</h2>
+  558     <div class="support-card">
+  559       <p>Have a question about Turnover? Reach out and we'll get back to you as soon as possible.</p>
+  560       <a href="mailto:support@hamptonsapps.com" class="support-email">✉️  &nbsp;support@hamptonsapps.com</a>
+  561     </div>
+  562   </section>
+  563
+  564   <!-- FOOTER -->
+  565   <footer>
+  566     <div class="footer-logo">Hamptons Apps</div>
+  567     <ul class="footer-links">
+  568       <li><a href="#app">Turnover</a></li>
+  569       <li><a href="#pricing">Pricing</a></li>
+  570       <li><a href="#support">Support</a></li>
+  571       <li><a href="privacy.html">Privacy Policy</a></li>
+  572     </ul>
+  573     <p class="footer-copy">&copy; 2026 Hamptons Apps. All rights reserved.</p>
+  574   </footer>
+  575
+  576 </body>
+  577 </html>
