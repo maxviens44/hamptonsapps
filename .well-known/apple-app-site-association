@@ -1,0 +1,15 @@
+{                                                                                                                                                                                                         
+    "applinks": {                                                                                                                                                                                           
+      "details": [                                                                                                                                                                                          
+        {                                                                                                                                                                                                   
+          "appIDs": ["3SNDZ336YS.com.hamptonsapps.turnover"],
+          "components": [                                    
+            {                                                                                                                                                                                               
+              "/": "/join*",
+              "comment": "Matches property invite links"                                                                                                                                                    
+            }                                               
+          ]  
+        }  
+      ]  
+    }  
+  }  
