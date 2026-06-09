@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ – Turnover</title>
+  <meta name="description" content="Answers to common questions about Turnover for hosts and cleaners." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ocean: #040C23;
+      --ocean-light: #0d1d3a;
+      --driftwood: #C4A882;
+      --sand: #F5F0E8;
+      --white: #ffffff;
+      --text: #1a2e38;
+      --muted: #6b7f88;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--sand);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2.5rem;
+      background: rgba(4, 12, 35, 0.96);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon { font-size: 1.4rem; }
+
+    .nav-logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--driftwood);
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 400;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover, .nav-links a.active { color: var(--driftwood); }
+
+    /* HERO */
+    .hero {
+      background: var(--ocean);
+      padding: 8rem 2rem 5rem;
+      text-align: center;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--driftwood);
+      margin-bottom: 1.2rem;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.6);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* TABS */
+    .tabs-bar {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 2.5rem 2rem 0;
+      background: var(--ocean);
+    }
+
+    .tab-btn {
+      padding: 0.6rem 1.6rem;
+      border-radius: 999px;
+      border: 1.5px solid rgba(196,168,130,0.3);
+      background: transparent;
+      color: rgba(255,255,255,0.6);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--driftwood);
+      border-color: var(--driftwood);
+      color: var(--ocean);
+    }
+
+    /* CONTENT */
+    .content {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 3rem 2rem 5rem;
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--driftwood);
+      margin-bottom: 1.2rem;
+      margin-top: 2.5rem;
+    }
+
+    .section-label:first-child { margin-top: 0; }
+
+    /* ACCORDION */
+    .faq-item {
+      border-bottom: 1px solid rgba(26,46,56,0.1);
+    }
+
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      text-align: left;
+      padding: 1.1rem 0;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.97rem;
+      font-weight: 500;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      transition: color 0.2s;
+    }
+
+    .faq-question:hover { color: var(--ocean); }
+
+    .faq-question.open { color: var(--ocean); }
+
+    .faq-chevron {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(4,12,35,0.07);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.25s, background 0.2s;
+      font-size: 0.65rem;
+      color: var(--muted);
+    }
+
+    .faq-question.open .faq-chevron {
+      transform: rotate(180deg);
+      background: var(--driftwood);
+      color: var(--ocean);
+    }
+
+    .faq-answer {
+      display: none;
+      padding: 0 0 1.2rem;
+      font-size: 0.93rem;
+      color: #4a5f6a;
+      line-height: 1.7;
+    }
+
+    .faq-answer.open { display: block; }
+
+    .faq-answer ul {
+      margin: 0.5rem 0 0 1.2rem;
+    }
+
+    .faq-answer ul li {
+      margin-bottom: 0.3rem;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--ocean);
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--driftwood);
+      margin-bottom: 1rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      list-style: none;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-links a {
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--driftwood); }
+
+    .footer-copy {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.25);
+    }
+
+    .support-note {
+      margin-top: 2.5rem;
+      padding: 1.5rem;
+      background: rgba(196,168,130,0.1);
+      border-radius: 12px;
+      border: 1px solid rgba(196,168,130,0.2);
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .support-note a {
+      color: var(--ocean);
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    .support-note a:hover { text-decoration: underline; }
+
+    @media (max-width: 600px) {
+      nav { padding: 1rem 1.2rem; }
+      .nav-links { display: none; }
+      .hero { padding: 6rem 1.5rem 4rem; }
+      .content { padding: 2rem 1.2rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <span class="nav-logo-icon">🏡</span>
+      <span class="nav-logo-text">Turnover</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html#app">Turnover</a></li>
+      <li><a href="index.html#pricing">Pricing</a></li>
+      <li><a href="index.html#support">Support</a></li>
+      <li><a href="faq.html" class="active">FAQ</a></li>
+      <li><a href="privacy.html">Privacy</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-tag">Help Center</div>
+    <h1>Frequently Asked Questions</h1>
+    <p>Everything you need to know about using Turnover as a host or cleaner.</p>
+  </div>
+
+  <div class="tabs-bar">
+    <button class="tab-btn active" onclick="switchTab('hosts', this)">For Hosts</button>
+    <button class="tab-btn" onclick="switchTab('cleaners', this)">For Cleaners</button>
+  </div>
+
+  <div class="content">
+
+    <!-- HOSTS -->
+    <div class="tab-panel active" id="tab-hosts">
+
+      <div class="section-label">Getting Started</div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          How do I add my first property?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          After signing up, tap the + button on the Properties tab. Enter your property name and address, add a cover photo, and set your timezone. You can then add rooms and assign cleaners.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          How do I invite a cleaner to my property?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Open your property, go to the Cleaners section, and tap Share Invite Code. You can send the 6-character code directly or share a QR code. Your cleaner enters the code in the Turnover app to join. You can also share the link — it opens the app automatically.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          How do I build a cleaning checklist?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Go to your property and tap Rooms. Add each room with a name and icon, then tap into a room to build its task list. You can use pre-built templates (bedroom, bathroom, kitchen, etc.) or create custom tasks. Set each task as Must Do, Standard, or Check priority.
+        </div>
+      </div>
+
+      <div class="section-label">Scheduling</div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          How do I schedule a clean?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Open your property and tap Scheduled Cleans, then tap + to create a new clean. Set the date, time, and optionally assign a cleaner and add notes. You can also set a recurring schedule — weekly, bi-weekly, or monthly — which creates 12 future instances automatically.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          Can Turnover auto-schedule cleans from my Airbnb or VRBO calendar?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Yes. Go to Property Settings and tap Calendar Sync. Paste your Airbnb or VRBO iCal feed URL and Turnover will automatically create a clean on every checkout day. You can still edit individual cleans after they're created.
+        </div>
+      </div>
+
+      <div class="section-label">Live Progress & History</div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          How do I watch a clean in progress?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          When a cleaner starts a clean, you'll see an Active Clean indicator on your property dashboard. Tap it to open the Live Progress view — you can see which rooms are done, which are in progress, and the overall completion percentage in real time.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          Where do I see completed cleans?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Go to your property and tap Clean History. Each submitted clean shows the cleaner's name, date, duration, room-by-room task completion, photos taken during the clean, and any damage reports filed.
+        </div>
+      </div>
+
+      <div class="section-label">Damage Reports & Supplies</div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          How do damage reports work?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Cleaners can file a damage report during or after a clean — they attach a photo, select the room, set severity, and add a description. You'll see all damage reports on your property dashboard. You can mark each one as resolved and add a repair cost, which is tracked in Insights.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          How does supply tracking work?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Add supplies to your property (name, description, quantity) in the Supplies section. During a clean, your cleaner can mark items as low or out. You'll see the supply status on your property dashboard so you know when to restock.
+        </div>
+      </div>
+
+      <div class="section-label">Subscriptions & Plans</div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          How many properties can I manage on each plan?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          <ul>
+            <li><strong>Free Trial (30 days)</strong> — Unlimited</li>
+            <li><strong>Starter ($4.99/mo)</strong> — Up to 2</li>
+            <li><strong>Pro ($9.99/mo)</strong> — Up to 5</li>
+            <li><strong>Portfolio ($19.99/mo)</strong> — Up to 10</li>
+            <li><strong>Unlimited ($29.99/mo)</strong> — Unlimited</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          What plan do I need for Insights?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Insights — including cleaning spend, average clean duration, and damage cost tracking — is available on Pro, Portfolio, and Unlimited plans.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          How do I cancel my subscription?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Subscriptions are managed through the App Store. Go to iPhone Settings → Apple ID → Subscriptions → Turnover, and tap Cancel. You'll retain access until the end of the current billing period.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          What happens when my free trial ends?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          After 30 days, you'll be prompted to choose a plan to continue. Your properties, rooms, and clean history are preserved — nothing is deleted. Cleaners are always free and are never affected by the host's subscription status.
+        </div>
+      </div>
+
+      <div class="support-note">
+        Still have questions? Email us at <a href="mailto:support@hamptonsapps.com">support@hamptonsapps.com</a>
+      </div>
+
+    </div>
+
+    <!-- CLEANERS -->
+    <div class="tab-panel" id="tab-cleaners">
+
+      <div class="section-label">Getting Started</div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          How do I join a property?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Ask your host to share the property invite code or QR code. In the Turnover app, tap Join a Property on your home screen or in Profile, enter the 6-character code, and you'll be added instantly. You can also scan the QR code with your camera — it opens the app automatically.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          Is Turnover free for cleaners?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Yes, completely free. Cleaners are never charged. Only hosts have a subscription.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          How do I see my upcoming cleans?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Your home screen shows a digest of all cleans scheduled in the next 7 days across all your assigned properties.
+        </div>
+      </div>
+
+      <div class="section-label">During a Clean</div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          How do I start a clean?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Open the property and tap Start Clean. You'll see all rooms with their task lists. Work room by room, checking off tasks as you go. When a room is done, tap Mark Room Done to move on.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          What are the task priority levels?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Each task has one of three priorities set by the host:
+          <ul>
+            <li><strong>Must Do</strong> — Critical, never skip</li>
+            <li><strong>Standard</strong> — Regular cleaning tasks</li>
+            <li><strong>Check</strong> — Inspect or verify condition</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          How do I add photos during a clean?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Inside the active clean, tap the Photos tab. You can take a photo with your camera or select one from your library. Photos are attached to the clean and visible to the host when you submit.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          How do I report damage?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Tap the Damage tab inside the active clean, then tap +. Select the room, attach a photo, set severity, and add a description. You can also file a damage report outside of an active clean from the property screen.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          How do I mark supplies as low or out?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Inside the active clean, tap the Supplies tab. Tap any item to mark it as low or out. The host will see the status update on their dashboard.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          How do I submit a completed clean?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Once all rooms are done, tap Mark House Ready. This notifies the host immediately. You'll then have the option to complete the final inspection checklist before submitting. The host receives the full clean report including tasks, photos, and any damage filed.
+        </div>
+      </div>
+
+      <div class="section-label">Team Cleans</div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          How do I clean with a team?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Start a clean and tap Team Clean to generate a team code. Share the 6-character code with your crew members. They enter it in the app to join the same session. You'll all see each other's progress in real time, and rooms are locked so two people don't work the same room at once.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          What is a crew member?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Crew members are helpers who join your active clean using a team code. They don't need their own Turnover account — they sign in anonymously through the app. Their work is merged into the clean when you submit.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggle(this)">
+          What if I need to pause and come back to a clean?
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          Your progress is saved automatically. Open the property and tap Resume Clean to pick up exactly where you left off.
+        </div>
+      </div>
+
+      <div class="support-note">
+        Still have questions? Email us at <a href="mailto:support@hamptonsapps.com">support@hamptonsapps.com</a>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-logo">Turnover</div>
+    <ul class="footer-links">
+      <li><a href="index.html#app">Turnover</a></li>
+      <li><a href="index.html#pricing">Pricing</a></li>
+      <li><a href="index.html#support">Support</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="privacy.html">Privacy Policy</a></li>
+    </ul>
+    <p class="footer-copy">© 2026 Hamptons Apps. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function toggle(btn) {
+      const answer = btn.nextElementSibling;
+      const isOpen = answer.classList.contains('open');
+      // Close all
+      document.querySelectorAll('.faq-answer.open').forEach(a => a.classList.remove('open'));
+      document.querySelectorAll('.faq-question.open').forEach(b => b.classList.remove('open'));
+      // Open this one if it was closed
+      if (!isOpen) {
+        answer.classList.add('open');
+        btn.classList.add('open');
+      }
+    }
+
+    function switchTab(tab, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + tab).classList.add('active');
+    }
+  </script>
+
+</body>
+</html>
