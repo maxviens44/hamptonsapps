@@ -1,2 +1,4 @@
 /trafficlaw  https://trafficlaw.netlify.app/trafficlaw  200
 /trafficlaw/*  https://trafficlaw.netlify.app/trafficlaw/:splat  200
+/immigrationlaw  https://immigrationlaw.netlify.app/immigrationlaw  200
+/immigrationlaw/*  https://immigrationlaw.netlify.app/immigrationlaw/:splat  200
