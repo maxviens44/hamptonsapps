@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Hockey Recruiting CRM</title>
+<style>
+:root{
+  --bg:#0f1720; --bg2:#141e2a; --panel:#18232f; --panel2:#1e2b39;
+  --line:#293848; --line2:#34475a; --text:#e8eef4; --muted:#92a4b5; --muted2:#6c7f91;
+  --accent:#3aa0ff; --accent2:#2b7fd6; --ice:#7fd4ff;
+  --radius:14px; --shadow:0 10px 30px rgba(0,0,0,.35);
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:linear-gradient(180deg,#0c141d,#0f1720 240px);color:var(--text);font-family:var(--font);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:var(--ice);text-decoration:none}
+a:hover{text-decoration:underline}
+button{font-family:inherit;cursor:pointer}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+
+/* Header */
+header.top{border-bottom:1px solid var(--line);background:rgba(15,23,32,.85);backdrop-filter:blur(8px);position:sticky;top:0;z-index:40}
+.topbar{display:flex;align-items:center;gap:16px;padding:14px 0;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px;margin-right:auto}
+.puck{width:38px;height:38px;border-radius:10px;background:radial-gradient(circle at 35% 30%,#3aa0ff,#1b5fa8);display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 14px rgba(58,160,255,.35)}
+.brand h1{font-size:17px;margin:0;font-weight:650;letter-spacing:.2px}
+.brand p{margin:0;font-size:12px;color:var(--muted)}
+.tabs{display:flex;gap:4px;background:var(--panel);padding:4px;border-radius:10px;border:1px solid var(--line)}
+.tabs button{background:transparent;border:0;color:var(--muted);padding:7px 14px;border-radius:7px;font-size:13.5px;font-weight:550}
+.tabs button.active{background:var(--accent);color:#fff}
+.iobtns{display:flex;gap:8px}
+.iobtns button{background:var(--panel);border:1px solid var(--line);color:var(--muted);padding:7px 11px;border-radius:8px;font-size:12.5px}
+.iobtns button:hover{color:var(--text);border-color:var(--line2)}
+
+/* Sections */
+.view{display:none;padding:26px 0 80px}
+.view.active{display:block}
+.secttl{font-size:13px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted2);margin:0 0 14px;font-weight:650}
+
+/* Stat cards */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:30px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+.stat .n{font-size:30px;font-weight:700;letter-spacing:-.5px}
+.stat .l{font-size:12.5px;color:var(--muted);margin-top:2px}
+.stat.hl{border-color:var(--accent2);background:linear-gradient(160deg,#1a3348,#18232f)}
+.stat.warn .n{color:#ffb547}
+
+.dashgrid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:820px){.dashgrid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px}
+.card h3{margin:0 0 4px;font-size:15px}
+.card .sub{color:var(--muted);font-size:12.5px;margin-bottom:12px}
+
+/* status breakdown bars */
+.sbar{display:flex;align-items:center;gap:10px;margin:7px 0;font-size:13px}
+.sbar .dot{width:10px;height:10px;border-radius:50%;flex:none}
+.sbar .track{flex:1;height:7px;background:var(--bg2);border-radius:5px;overflow:hidden}
+.sbar .fill{height:100%;border-radius:5px}
+.sbar .c{color:var(--muted);width:26px;text-align:right}
+
+.fu-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13.5px;cursor:pointer}
+.fu-item:last-child{border-bottom:0}
+.fu-item:hover{color:var(--ice)}
+.fu-item .when{margin-left:auto;font-size:12px;font-weight:600}
+.fu-item .when.over{color:#ff6b6b}
+.fu-item .when.soon{color:#ffb547}
+.empty{color:var(--muted2);font-size:13px;font-style:italic;padding:8px 0}
+
+/* Filter bar */
+.filterbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.filterbar input[type=text],.filterbar select{background:var(--panel);border:1px solid var(--line);color:var(--text);padding:9px 12px;border-radius:9px;font-size:13.5px;outline:none}
+.filterbar input[type=text]{min-width:220px;flex:1}
+.filterbar input[type=text]:focus,.filterbar select:focus{border-color:var(--accent2)}
+.filterbar select{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2392a4b5' stroke-width='3'><path d='M6 9l6 6 6-6'/></svg>");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px}
+.chk{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);background:var(--panel);border:1px solid var(--line);padding:8px 12px;border-radius:9px;cursor:pointer;user-select:none}
+.chk input{accent-color:var(--accent)}
+.countline{font-size:12.5px;color:var(--muted2);margin-bottom:12px}
+
+/* Table */
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:760px}
+th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted2);font-weight:650;padding:12px 14px;border-bottom:1px solid var(--line);background:var(--panel2);cursor:pointer;white-space:nowrap}
+th:hover{color:var(--text)}
+td{padding:11px 14px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:middle}
+tr:last-child td{border-bottom:0}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--panel2)}
+.sch{font-weight:600}
+.sub2{color:var(--muted);font-size:12px}
+.star{color:#ffcf4d;font-size:14px}
+.pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:600;white-space:nowrap}
+.tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;background:var(--bg2);color:var(--muted);border:1px solid var(--line)}
+.fu-cell{font-size:12.5px;font-weight:600}
+.fu-cell.over{color:#ff6b6b}
+.fu-cell.soon{color:#ffb547}
+
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(6,11,17,.72);backdrop-filter:blur(3px);z-index:60;display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:40px 16px}
+.modal-bg.show{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--line2);border-radius:18px;width:100%;max-width:720px;box-shadow:var(--shadow);animation:pop .14s ease}
+@keyframes pop{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+.mhead{padding:20px 24px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:14px}
+.mhead .x{margin-left:auto;background:var(--panel);border:1px solid var(--line);color:var(--muted);width:32px;height:32px;border-radius:8px;font-size:18px;line-height:1;flex:none}
+.mhead h2{margin:0;font-size:19px}
+.mhead .meta{color:var(--muted);font-size:13px;margin-top:3px}
+.mbody{padding:20px 24px;display:grid;gap:20px}
+.contactrow{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:13.5px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:13px 16px}
+.contactrow div{display:flex;gap:6px}
+.contactrow .k{color:var(--muted2)}
+.fieldgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:600px){.fieldgrid{grid-template-columns:1fr}}
+.field label{display:block;font-size:11.5px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted2);font-weight:650;margin-bottom:6px}
+.field select,.field input[type=date]{width:100%;background:var(--panel);border:1px solid var(--line);color:var(--text);padding:9px 11px;border-radius:9px;font-size:13.5px;outline:none}
+.field select:focus,.field input:focus{border-color:var(--accent2)}
+.togstar{display:inline-flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);color:var(--muted);padding:8px 13px;border-radius:9px;font-size:13px}
+.togstar.on{color:#ffcf4d;border-color:#8a6d1f}
+.block h4{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted2)}
+.check{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.check:last-child{border-bottom:0}
+.check input{margin-top:3px;accent-color:var(--accent);width:16px;height:16px;flex:none}
+.check .ct{font-weight:600}
+.check .cd{color:var(--muted);font-size:12.5px}
+.check.done .ct{text-decoration:line-through;color:var(--muted2)}
+textarea{width:100%;background:var(--panel);border:1px solid var(--line);color:var(--text);padding:11px 13px;border-radius:9px;font-size:13.5px;font-family:inherit;outline:none;resize:vertical;min-height:70px}
+textarea:focus{border-color:var(--accent2)}
+.btnrow{display:flex;gap:9px;flex-wrap:wrap}
+.btn{background:var(--accent);border:0;color:#fff;padding:9px 15px;border-radius:9px;font-size:13px;font-weight:600}
+.btn.ghost{background:var(--panel);border:1px solid var(--line);color:var(--text)}
+.btn.ghost:hover{border-color:var(--line2)}
+.btn.sm{padding:7px 12px;font-size:12.5px}
+.logitem{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 12px;margin-bottom:8px;font-size:13px}
+.logitem .ts{font-size:11px;color:var(--muted2);margin-bottom:3px;display:flex;justify-content:space-between}
+.logitem .del{background:none;border:0;color:var(--muted2);font-size:11px;cursor:pointer}
+.logitem .del:hover{color:#ff6b6b}
+
+/* Guide */
+.guide-step{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin-bottom:12px;display:flex;gap:14px}
+.guide-step .num{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;font-size:14px}
+.guide-step h4{margin:0 0 5px;font-size:15px}
+.guide-step p{margin:0;color:var(--muted);font-size:13.5px}
+.tmpl{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px;white-space:pre-wrap;font-size:13px;line-height:1.65;color:#cdd9e3;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.infoback{background:linear-gradient(160deg,#1a2f45,#18232f);border:1px solid var(--accent2);border-radius:var(--radius);padding:18px 20px;margin-top:8px}
+.infoback h4{margin:0 0 6px;font-size:15px;color:var(--ice)}
+.srclist{list-style:none;padding:0;margin:0}
+.srclist li{padding:6px 0;border-bottom:1px solid var(--line);font-size:13px}
+.srclist li:last-child{border-bottom:0}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#1c2b3a;border:1px solid var(--line2);color:var(--text);padding:11px 20px;border-radius:10px;font-size:13.5px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.25s;z-index:80}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.note-src{font-size:12px;color:var(--muted);font-style:italic}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap topbar">
+    <div class="brand">
+      <div class="puck">🏒</div>
+      <div><h1>Hockey Recruiting CRM</h1><p>NCAA Division III men&rsquo;s hockey &middot; 2026&ndash;27</p></div>
+    </div>
+    <div class="tabs">
+      <button data-view="dash" class="active">Dashboard</button>
+      <button data-view="programs">Programs</button>
+      <button data-view="guide">Guide</button>
+    </div>
+    <div class="iobtns">
+      <button id="exportBtn" title="Download your CRM data as a backup">&#8681; Export</button>
+      <button id="importBtn" title="Restore from a backup file">&#8679; Import</button>
+      <input type="file" id="importFile" accept="application/json" hidden>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- DASHBOARD -->
+  <section class="view active" id="view-dash">
+    <div class="stats" id="statCards"></div>
+    <div class="dashgrid">
+      <div class="card">
+        <h3>Follow-ups due</h3>
+        <div class="sub">Schools with a follow-up date set</div>
+        <div id="followList"></div>
+      </div>
+      <div class="card">
+        <h3>Pipeline by status</h3>
+        <div class="sub">Where every program stands</div>
+        <div id="statusBreak"></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:20px">
+      <h3>Recent activity</h3>
+      <div class="sub">Latest notes logged</div>
+      <div id="recentAct"></div>
+    </div>
+  </section>
+
+  <!-- PROGRAMS -->
+  <section class="view" id="view-programs">
+    <div class="filterbar">
+      <input type="text" id="search" placeholder="Search school, coach, city&hellip;">
+      <select id="fRegion"><option value="">All regions</option></select>
+      <select id="fConf"><option value="">All conferences</option></select>
+      <select id="fStatus"><option value="">All statuses</option></select>
+      <label class="chk"><input type="checkbox" id="fStar"> &#9733; Starred</label>
+      <label class="chk"><input type="checkbox" id="fFollow"> Follow-up due</label>
+    </div>
+    <div class="countline" id="countLine"></div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr>
+          <th data-sort="school">School</th>
+          <th data-sort="region">Region</th>
+          <th data-sort="conference">Conf.</th>
+          <th data-sort="coach">Coach</th>
+          <th data-sort="status">Status</th>
+          <th data-sort="lastContact">Last contact</th>
+          <th data-sort="followUp">Follow-up</th>
+        </tr></thead>
+        <tbody id="progBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- GUIDE -->
+  <section class="view" id="view-guide">
+    <h2 class="secttl">How to contact coaches</h2>
+    <div id="stepsWrap"></div>
+
+    <h2 class="secttl" style="margin-top:34px">Email template</h2>
+    <div class="btnrow" style="margin-bottom:12px">
+      <button class="btn sm" id="copyTmpl">&#128203; Copy template</button>
+    </div>
+    <div class="tmpl" id="tmplBox"></div>
+
+    <h2 class="secttl" style="margin-top:34px">On the radar for 2027&ndash;28</h2>
+    <div class="infoback">
+      <h4>Saint Anselm College &mdash; Manchester/Goffstown, NH</h4>
+      <p style="margin:0 0 8px;color:var(--muted);font-size:13.5px">Division II in 2026&ndash;27. Begins its Division III transition and Little East hockey affiliation in 2027&ndash;28. Not included in the 92 current programs.</p>
+      <p style="margin:0;font-size:13.5px">Head coach: <strong>Larry Rocha</strong> &middot; <a href="mailto:lrocha@anselm.edu">lrocha@anselm.edu</a> &middot; 603-222-4273</p>
+    </div>
+
+    <h2 class="secttl" style="margin-top:34px">Sources &amp; scope</h2>
+    <div class="card">
+      <ul class="srclist">
+        <li><a href="https://www.ncaa.org/eligibility-center/recruiting/" target="_blank" rel="noopener">NCAA recruiting and tryout rules</a></li>
+        <li><a href="https://www.ncaa.org/eligibility-center/" target="_blank" rel="noopener">NCAA Division III eligibility and scholarships</a></li>
+        <li><a href="https://saintanselmhawks.com/sports/mens-ice-hockey/coaches" target="_blank" rel="noopener">Saint Anselm coach contact</a></li>
+        <li style="color:var(--muted)">Scope: NCAA varsity Division III men only. Contacts checked October 21, 2026. No school has confirmed an open roster spot or guaranteed evaluation &mdash; always verify directly with the coach.</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<div class="modal-bg" id="modalBg"><div class="modal" id="modal"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const PROGRAMS=[{"id": 1, "region": "New England", "state": "CT", "school": "Albertus Magnus College", "city": "New Haven", "conference": "UCHC", "coach": "Tim Richter", "email": "trichter@albertus.edu", "phone": "203-672-6683", "notes": "", "source": "https://albertusfalcons.com/sports/mice/coaches/index"}, {"id": 2, "region": "New England", "state": "CT", "school": "Connecticut College", "city": "New London", "conference": "NESCAC", "coach": "Jim Ward", "email": "jbwar2@conncoll.edu", "phone": "(860) 439-2237", "notes": "", "source": "https://camelathletics.com/sports/mens-ice-hockey/coaches"}, {"id": 3, "region": "New England", "state": "CT", "school": "Trinity College", "city": "Hartford", "conference": "NESCAC", "coach": "Matthew Greason", "email": "matthew.greason@trincoll.edu", "phone": "860-297-5176", "notes": "", "source": "https://bantamsports.com/sports/mens-ice-hockey/coaches"}, {"id": 4, "region": "New England", "state": "CT", "school": "University of Saint Joseph", "city": "West Hartford", "conference": "MASCAC", "coach": "Adam Houli", "email": "ahouli@usj.edu", "phone": "732-822-0949", "notes": "Inaugural season 2026–27", "source": "https://www.usjbluejays.com/sports/mice/recruiting"}, {"id": 5, "region": "New England", "state": "CT", "school": "Wesleyan University", "city": "Middletown", "conference": "NESCAC", "coach": "Chris Potter", "email": "cjpotter@wesleyan.edu", "phone": "(860) 685-2927", "notes": "", "source": "https://athletics.wesleyan.edu/sports/mens-ice-hockey/coaches"}, {"id": 6, "region": "New England", "state": "CT", "school": "Western Connecticut State University", "city": "Danbury", "conference": "Little East", "coach": "Doug Friedman", "email": "friedmand@wcsu.edu", "phone": "203-8379067", "notes": "", "source": "https://westconnathletics.com/sports/mens-ice-hockey/coaches"}, {"id": 7, "region": "New England", "state": "MA", "school": "Amherst College", "city": "Amherst", "conference": "NESCAC", "coach": "Eddie Effinger", "email": "eeffinger12@amherst.edu", "phone": "413-542-7950", "notes": "", "source": "https://athletics.amherst.edu/sports/mens-ice-hockey/coaches"}, {"id": 8, "region": "New England", "state": "MA", "school": "Babson College", "city": "Wellesley", "conference": "Little East", "coach": "Jamie Rice", "email": "jrice@babson.edu", "phone": "(781) 239-5981", "notes": "", "source": "https://babsonathletics.com/sports/mens-ice-hockey/coaches"}, {"id": 9, "region": "New England", "state": "MA", "school": "Curry College", "city": "Milton", "conference": "CNE", "coach": "Peter Roundy", "email": "peter.roundy@curry.edu", "phone": "617-333-2224", "notes": "", "source": "https://www.curry.edu/directory/roundy-peter"}, {"id": 10, "region": "New England", "state": "MA", "school": "Endicott College", "city": "Beverly", "conference": "CNE", "coach": "R.J. Tolan", "email": "rtolan@endicott.edu", "phone": "978-998-7738", "notes": "", "source": "https://www.ecgulls.com/sports/mice/coaches/tolan_rj"}, {"id": 11, "region": "New England", "state": "MA", "school": "Fitchburg State University", "city": "Fitchburg", "conference": "MASCAC", "coach": "Dean Fuller", "email": "dfuller@fitchburgstate.edu", "phone": "508-631-5860", "notes": "", "source": "https://www.fitchburgfalcons.com/sports/mice/coaches/Fuller_Dean"}, {"id": 12, "region": "New England", "state": "MA", "school": "Framingham State University", "city": "Framingham", "conference": "MASCAC", "coach": "Mike Bailey", "email": "mbailey10@framingham.edu", "phone": "508-215-5415", "notes": "", "source": "https://www.fsurams.com/sports/mice/coaches/mike_bailey"}, {"id": 13, "region": "New England", "state": "MA", "school": "MCLA", "city": "North Adams", "conference": "MASCAC", "coach": "Marcus Gloss", "email": "marcus.gloss@mcla.edu", "phone": "413-662-5349", "notes": "", "source": "https://athletics.mcla.edu/Staff_Bio-s/Gloss"}, {"id": 14, "region": "New England", "state": "MA", "school": "Nichols College", "city": "Dudley", "conference": "CNE", "coach": "Alex Gacek", "email": "alex.gacek@nichols.edu", "phone": "508-213-2305", "notes": "", "source": "https://nicholsathletics.com/sports/mens-ice-hockey/coaches"}, {"id": 15, "region": "New England", "state": "MA", "school": "Salem State University", "city": "Salem", "conference": "MASCAC", "coach": "Chris MacInnis", "email": "cmacinnis@salemstate.edu", "phone": "Not published on cited page", "notes": "Athletics email shown. University directory also lists chris.macinnis@salemstate.edu.", "source": "https://salemstatevikings.com/sports/mice/coaches/index"}, {"id": 16, "region": "New England", "state": "MA", "school": "Suffolk University", "city": "Boston", "conference": "CNE", "coach": "Shawn McEachern", "email": "shawn.mceachern@suffolk.edu", "phone": "617-573-8379", "notes": "", "source": "https://www.gosuffolkrams.com/sports/mice/coaches/mceachern"}, {"id": 17, "region": "New England", "state": "MA", "school": "Tufts University", "city": "Medford", "conference": "NESCAC", "coach": "Pat Norton", "email": "patrick.norton@tufts.edu", "phone": "617-627-5222", "notes": "", "source": "https://gotuftsjumbos.com/sports/mens-ice-hockey/coaches"}, {"id": 18, "region": "New England", "state": "MA", "school": "UMass Boston", "city": "Dorchester", "conference": "Little East", "coach": "Peter Belisle", "email": "Peter.Belisle@umb.edu", "phone": "617-287-7812", "notes": "", "source": "https://beaconsathletics.com/sports/mens-ice-hockey/coaches"}, {"id": 19, "region": "New England", "state": "MA", "school": "UMass Dartmouth", "city": "Dartmouth", "conference": "Little East", "coach": "Erik Noack", "email": "enoack@umassd.edu", "phone": "508-999-8723", "notes": "", "source": "https://corsairathletics.com/sports/mens-ice-hockey/coaches"}, {"id": 20, "region": "New England", "state": "MA", "school": "Wentworth Institute of Technology", "city": "Boston", "conference": "CNE", "coach": "Jason Smith", "email": "smithj67@wit.edu", "phone": "Not published on cited page", "notes": "", "source": "https://www.wentworthathletics.com/information/directory/index"}, {"id": 21, "region": "New England", "state": "MA", "school": "Western New England University", "city": "Springfield", "conference": "CNE", "coach": "Mike Young", "email": "michael.young@wne.edu", "phone": "Not published on cited page", "notes": "", "source": "https://wnegoldenbears.com/sports/mens-ice-hockey/coaches"}, {"id": 22, "region": "New England", "state": "MA", "school": "Westfield State University", "city": "Westfield", "conference": "MASCAC", "coach": "Bob Miele", "email": "bmiele@westfield.ma.edu", "phone": "413-572-8221", "notes": "", "source": "https://westfieldstateowls.com/sports/mice/coaches/miele_bob00.html"}, {"id": 23, "region": "New England", "state": "MA", "school": "Williams College", "city": "Williamstown", "conference": "NESCAC", "coach": "Bill Kangas", "email": "wkangas@williams.edu", "phone": "413-597-2036", "notes": "", "source": "https://ephsports.williams.edu/sports/mens-ice-hockey/coaches"}, {"id": 24, "region": "New England", "state": "MA", "school": "Worcester State University", "city": "Worcester", "conference": "MASCAC", "coach": "Bob Deraney", "email": "rderaney@worcester.edu", "phone": "508-929-8510", "notes": "", "source": "https://www.wsulancers.com/information/directory/index"}, {"id": 25, "region": "New England", "state": "ME", "school": "Bowdoin College", "city": "Brunswick", "conference": "NESCAC", "coach": "Ben Guite", "email": "b.guite@bowdoin.edu", "phone": "(207) 725-3773", "notes": "", "source": "https://athletics.bowdoin.edu/sports/mens-ice-hockey/coaches"}, {"id": 26, "region": "New England", "state": "ME", "school": "Colby College", "city": "Waterville", "conference": "NESCAC", "coach": "Blaise MacDonald", "email": "bjmacdon@colby.edu", "phone": "207-859-4913", "notes": "", "source": "https://colbyathletics.com/sports/mens-ice-hockey/coaches"}, {"id": 27, "region": "New England", "state": "ME", "school": "University of New England", "city": "Biddeford", "conference": "CNE", "coach": "Kevin Swallow", "email": "kswallow1@une.edu", "phone": "602-2663", "notes": "Phone published without area code", "source": "https://athletics.une.edu/sports/mens-ice-hockey/coaches"}, {"id": 28, "region": "New England", "state": "ME", "school": "University of Southern Maine", "city": "Portland", "conference": "Little East", "coach": "Matt Pinchevsky", "email": "matthew.pinchevsky@maine.edu", "phone": "(207) 780-5987", "notes": "", "source": "https://southernmainehuskies.com/sports/mens-ice-hockey/coaches"}, {"id": 29, "region": "New England", "state": "NH", "school": "Keene State College", "city": "Keene", "conference": "Little East", "coach": "Bobby Rodrigue", "email": "Robert.Rodrigue@keene.edu", "phone": "603-358-2858", "notes": "", "source": "https://keeneowls.com/sports/mens-ice-hockey/coaches"}, {"id": 30, "region": "New England", "state": "NH", "school": "New England College", "city": "Henniker", "conference": "Little East", "coach": "Tom Carroll", "email": "tcarroll@nec.edu", "phone": "603-428-2294", "notes": "", "source": "https://athletics.nec.edu/sports/mens-ice-hockey/coaches"}, {"id": 31, "region": "New England", "state": "NH", "school": "Plymouth State University", "city": "Plymouth", "conference": "Little East", "coach": "Craig Russell", "email": "c_russell@plymouth.edu", "phone": "603-535-2744", "notes": "", "source": "https://athletics.plymouth.edu/sports/mens-ice-hockey/coaches"}, {"id": 32, "region": "New England", "state": "NH", "school": "Rivier University", "city": "Nashua", "conference": "MASCAC", "coach": "Shaun Millerick", "email": "smillerick@rivier.edu", "phone": "(603) 897-8258", "notes": "", "source": "https://rivierathletics.com/sports/mens-ice-hockey/coaches"}, {"id": 33, "region": "New England", "state": "RI", "school": "Johnson & Wales (Providence)", "city": "Providence", "conference": "CNE", "coach": "Eric Graham", "email": "eric.graham@jwu.edu", "phone": "401-598-5265", "notes": "", "source": "https://providence.jwuathletics.com/sports/mens-ice-hockey/coaches"}, {"id": 34, "region": "New England", "state": "RI", "school": "Roger Williams University", "city": "Bristol", "conference": "CNE", "coach": "Chris Hall", "email": "cbhall@rwu.edu", "phone": "401.254.3069", "notes": "", "source": "https://rwuhawks.com/sports/mens-ice-hockey/coaches"}, {"id": 35, "region": "New England", "state": "RI", "school": "Salve Regina University", "city": "Newport", "conference": "CNE", "coach": "Jay Punsky", "email": "jay.punsky@salve.edu", "phone": "Not published on cited page", "notes": "", "source": "https://salveathletics.com/sports/mens-ice-hockey/coaches"}, {"id": 36, "region": "New England", "state": "VT", "school": "Middlebury College", "city": "Middlebury", "conference": "NESCAC", "coach": "Jack Ceglarski", "email": "jceglarski@middlebury.edu", "phone": "802.443.5991", "notes": "", "source": "https://athletics.middlebury.edu/sports/mens-ice-hockey/coaches"}, {"id": 37, "region": "New England", "state": "VT", "school": "Norwich University", "city": "Northfield", "conference": "Little East", "coach": "Dominick Dawes", "email": "dawesd@norwich.edu", "phone": "802-485-2242", "notes": "", "source": "https://norwichathletics.com/sports/mens-ice-hockey/coaches"}, {"id": 38, "region": "New England", "state": "VT", "school": "Vermont State University Castleton", "city": "Castleton", "conference": "Little East", "coach": "Kyle Richards", "email": "kyle.richards@vermontstate.edu", "phone": "(802) 468-1110", "notes": "", "source": "https://castletonsports.com/sports/mens-ice-hockey/coaches"}, {"id": 39, "region": "New York", "state": "NY", "school": "Buffalo State University", "city": "Buffalo", "conference": "SUNYAC", "coach": "Steve Murphy", "email": "murphysj@buffalostate.edu", "phone": "(716) 878-3396", "notes": "", "source": "https://buffalostateathletics.com/sports/mens-ice-hockey/coaches"}, {"id": 40, "region": "New York", "state": "NY", "school": "Elmira College", "city": "Elmira", "conference": "UCHC", "coach": "Aaron Saul", "email": "asaul@elmira.edu", "phone": "Not published on cited page", "notes": "", "source": "https://athletics.elmira.edu/sports/mens-ice-hockey/coaches"}, {"id": 41, "region": "New York", "state": "NY", "school": "Hamilton College", "city": "Clinton", "conference": "NESCAC", "coach": "Rob Haberbusch", "email": "rhaberbu@hamilton.edu", "phone": "315-859-4438", "notes": "", "source": "https://athletics.hamilton.edu/sports/mens-ice-hockey/coaches"}, {"id": 42, "region": "New York", "state": "NY", "school": "Hobart College", "city": "Geneva", "conference": "SUNYAC", "coach": "Mark Taylor", "email": "mtaylor@hws.edu", "phone": "(315) 781-3539", "notes": "", "source": "https://hwsathletics.com/sports/mens-ice-hockey/coaches"}, {"id": 43, "region": "New York", "state": "NY", "school": "Manhattanville University", "city": "Purchase", "conference": "UCHC", "coach": "David Turco", "email": "david.turco@mville.edu", "phone": "914-323-7279", "notes": "", "source": "https://govaliants.com/sports/mens-ice-hockey/coaches"}, {"id": 44, "region": "New York", "state": "NY", "school": "Nazareth University", "city": "Rochester", "conference": "UCHC", "coach": "James McDonald", "email": "jmcdona7@naz.edu", "phone": "585-389-2119", "notes": "", "source": "https://nazathletics.com/sports/mens-ice-hockey/coaches"}, {"id": 45, "region": "New York", "state": "NY", "school": "SUNY Brockport", "city": "Brockport", "conference": "UCHC", "coach": "Brian Dickinson", "email": "bdickins@brockport.edu", "phone": "585-395-5351", "notes": "", "source": "https://gobrockport.com/sports/mens-ice-hockey/coaches"}, {"id": 46, "region": "New York", "state": "NY", "school": "SUNY Canton", "city": "Canton", "conference": "SUNYAC", "coach": "Alex Boak", "email": "boak100@canton.edu", "phone": "315-386-7104", "notes": "", "source": "https://rooathletics.com/sports/mens-ice-hockey/coaches"}, {"id": 47, "region": "New York", "state": "NY", "school": "SUNY Cortland", "city": "Cortland", "conference": "SUNYAC", "coach": "Joe Cardarelli", "email": "joe.cardarelli@cortland.edu", "phone": "607-753-4990", "notes": "", "source": "https://cortlandreddragons.com/sports/mens-ice-hockey/coaches"}, {"id": 48, "region": "New York", "state": "NY", "school": "SUNY Fredonia", "city": "Fredonia", "conference": "SUNYAC", "coach": "Jeff Meredith", "email": "Jeffrey.Meredith@fredonia.edu", "phone": "(716) 673-3334", "notes": "", "source": "https://fredoniabluedevils.com/sports/mens-ice-hockey/coaches"}, {"id": 49, "region": "New York", "state": "NY", "school": "SUNY Geneseo", "city": "Geneseo", "conference": "UCHC", "coach": "Chris Schultz", "email": "schultz@geneseo.edu", "phone": "585-245-5356", "notes": "", "source": "https://geneseoknights.com/sports/2022/6/8/recruiting.aspx"}, {"id": 50, "region": "New York", "state": "NY", "school": "SUNY Morrisville", "city": "Morrisville", "conference": "SUNYAC", "coach": "Sebastian Ragno", "email": "ragnosj@morrisville.edu", "phone": "Not published on cited page", "notes": "", "source": "https://morrisvillemustangs.com/staff-directory/mens-ice-hockey-department/14"}, {"id": 51, "region": "New York", "state": "NY", "school": "SUNY Oswego", "city": "Oswego", "conference": "SUNYAC", "coach": "Jon Whitelaw", "email": "whitelaw@oswego.edu", "phone": "315-312-2848", "notes": "Interim head coach", "source": "https://oswegolakers.com/sports/mens-ice-hockey/coaches"}, {"id": 52, "region": "New York", "state": "NY", "school": "SUNY Plattsburgh", "city": "Plattsburgh", "conference": "SUNYAC", "coach": "Steve Moffat", "email": "moffatsc@plattsburgh.edu", "phone": "(518) 564-3607", "notes": "", "source": "https://gocardinalsports.com/sports/mens-ice-hockey/coaches"}, {"id": 53, "region": "New York", "state": "NY", "school": "SUNY Potsdam", "city": "Potsdam", "conference": "SUNYAC", "coach": "Mike Grace", "email": "gracemr@potsdam.edu", "phone": "315-267-2518", "notes": "Current staff directory lists head coach. Older coaches page still says interim.", "source": "https://potsdambears.com/sports/mens-ice-hockey/coaches"}, {"id": 54, "region": "New York", "state": "NY", "school": "Skidmore College", "city": "Saratoga Springs", "conference": "SUNYAC", "coach": "Rob Hutchison", "email": "rhutchis@skidmore.edu", "phone": "(518) 580-5374", "notes": "", "source": "https://skidmoreathletics.com/sports/mens-ice-hockey/coaches"}, {"id": 55, "region": "New York", "state": "NY", "school": "St. John Fisher University", "city": "Pittsford", "conference": "UCHC", "coach": "Reid Lesswing", "email": "rlesswing@sjfc.edu", "phone": "3895", "notes": "Phone published as campus extension 3895", "source": "https://sjfathletics.com/sports/mens-ice-hockey/coaches"}, {"id": 56, "region": "New York", "state": "NY", "school": "Utica University", "city": "Utica", "conference": "UCHC", "coach": "Gary Heenan", "email": "gheenan@utica.edu", "phone": "Not published on cited page", "notes": "", "source": "https://uticapioneers.com/sports/mens-ice-hockey/coaches"}, {"id": 57, "region": "Mid-Atlantic", "state": "MD", "school": "Stevenson University", "city": "Stevenson", "conference": "MAC", "coach": "Matt Bruneteau", "email": "mbruneteau@stevenson.edu", "phone": "443-352-4804", "notes": "", "source": "https://gomustangsports.com/sports/mens-ice-hockey/coaches"}, {"id": 58, "region": "Mid-Atlantic", "state": "PA", "school": "Albright College", "city": "Reading", "conference": "MAC", "coach": "Jeff German", "email": "jgerman@albright.edu", "phone": "Not published on cited page", "notes": "Inaugural season 2026–27", "source": "https://albrightathletics.com/staff-directory/jeff-german/480"}, {"id": 59, "region": "Mid-Atlantic", "state": "PA", "school": "Alvernia University", "city": "Reading", "conference": "MAC", "coach": "Andrew Burke", "email": "Andrew.burke@alvernia.edu", "phone": "610-790-1926", "notes": "", "source": "https://auwolves.com/sports/mens-ice-hockey/coaches"}, {"id": 60, "region": "Mid-Atlantic", "state": "PA", "school": "Arcadia University", "city": "Glenside", "conference": "MAC", "coach": "Ryan Heickert", "email": "heickertr@arcadia.edu", "phone": "215-572-2893", "notes": "", "source": "https://arcadiaknights.com/sports/mens-ice-hockey/coaches"}, {"id": 61, "region": "Mid-Atlantic", "state": "PA", "school": "Chatham University", "city": "Pittsburgh", "conference": "UCHC", "coach": "Michael Gershon", "email": "m.gershon@chatham.edu", "phone": "412-365-1763", "notes": "", "source": "https://gochathamcougars.com/sports/mens-ice-hockey/coaches"}, {"id": 62, "region": "Mid-Atlantic", "state": "PA", "school": "King's College", "city": "Wilkes-Barre", "conference": "MAC", "coach": "Race Bennett", "email": "racebennett@kings.edu", "phone": "Not published on cited page", "notes": "", "source": "https://kingscollegeathletics.com/sports/mens-ice-hockey/coaches"}, {"id": 63, "region": "Mid-Atlantic", "state": "PA", "school": "Lebanon Valley College", "city": "Annville", "conference": "MAC", "coach": "Don Parsons", "email": "parsons@lvc.edu", "phone": "717-867-6258 (Office) / 563-340-6724 (Cell)", "notes": "", "source": "https://godutchmen.com/sports/mens-ice-hockey/coaches"}, {"id": 64, "region": "Mid-Atlantic", "state": "PA", "school": "Misericordia University", "city": "Dallas", "conference": "MAC", "coach": "Kevin Cole", "email": "kcole1@misericordia.edu", "phone": "570-674-8330", "notes": "", "source": "https://athletics.misericordia.edu/sports/mens-ice-hockey/coaches"}, {"id": 65, "region": "Mid-Atlantic", "state": "PA", "school": "Neumann University", "city": "Aston", "conference": "MAC", "coach": "Michael Hedden", "email": "heddenm@neumann.edu", "phone": "484.840.4713", "notes": "", "source": "https://neumannathletics.com/sports/mens-ice-hockey/coaches"}, {"id": 66, "region": "Mid-Atlantic", "state": "PA", "school": "Wilkes University", "city": "Wilkes-Barre", "conference": "MAC", "coach": "Tyler Hynes", "email": "tyler.hynes@wilkes.edu", "phone": "570-408-4048", "notes": "", "source": "https://gowilkesu.com/sports/mens-ice-hockey/coaches"}, {"id": 67, "region": "Great Lakes", "state": "IL", "school": "Aurora University", "city": "Aurora", "conference": "NCHA", "coach": "Jason Bloomingburg", "email": "jbloomingburg@aurora.edu", "phone": "630-844-6168", "notes": "", "source": "https://athletics.aurora.edu/sports/mens-ice-hockey/coaches"}, {"id": 68, "region": "Great Lakes", "state": "IL", "school": "Lake Forest College", "city": "Lake Forest", "conference": "NCHA", "coach": "Sean O'Malley", "email": "omalley@lakeforest.edu", "phone": "847-735-6152", "notes": "", "source": "https://goforesters.com/sports/mens-ice-hockey/coaches"}, {"id": 69, "region": "Great Lakes", "state": "IN", "school": "Trine University", "city": "Angola", "conference": "NCHA", "coach": "Alex Todd", "email": "todda@trine.edu", "phone": "260.665.4259", "notes": "", "source": "https://trinethunder.com/sports/mens-ice-hockey/coaches"}, {"id": 70, "region": "Great Lakes", "state": "MI", "school": "Adrian College", "city": "Adrian", "conference": "NCHA", "coach": "Adam Phillips", "email": "adamphillips@adrian.edu", "phone": "(517) 265-5161 ext. 3838", "notes": "", "source": "https://adrianbulldogs.com/sports/mens-ice-hockey/coaches"}, {"id": 71, "region": "Great Lakes", "state": "OH", "school": "Hiram College", "city": "Hiram", "conference": "Independent", "coach": "Jeffrey Curto", "email": "CurtoJJ@hiram.edu", "phone": "(330) 569-5327", "notes": "", "source": "https://hiramterriers.com/sports/mens-ice-hockey/coaches"}, {"id": 72, "region": "Upper Midwest", "state": "IA", "school": "University of Dubuque", "city": "Dubuque", "conference": "NCHA", "coach": "Seamus Gregory", "email": "seamusgregory@dbq.edu", "phone": "563-589-3554", "notes": "", "source": "https://udspartans.com/sports/mens-hockey/coaches"}, {"id": 73, "region": "Upper Midwest", "state": "MN", "school": "Augsburg University", "city": "Minneapolis", "conference": "MIAC", "coach": "Zach Stepan", "email": "stepanz@augsburg.edu", "phone": "612-330-1301", "notes": "", "source": "https://athletics.augsburg.edu/sports/mens-ice-hockey/coaches"}, {"id": 74, "region": "Upper Midwest", "state": "MN", "school": "Bethel University", "city": "Arden Hills", "conference": "MIAC", "coach": "Chris McKelvie", "email": "c-mckelvie@bethel.edu", "phone": "(651) 638-6471", "notes": "", "source": "https://athletics.bethel.edu/sports/mens-ice-hockey/coaches"}, {"id": 75, "region": "Upper Midwest", "state": "MN", "school": "Concordia College", "city": "Moorhead", "conference": "MIAC", "coach": "Kirk Olimb", "email": "kolimb@cord.edu", "phone": "218-299-4166", "notes": "", "source": "https://www.concordiacollege.edu/student-life/athletics-recreational-sports/athletics-staff/"}, {"id": 76, "region": "Upper Midwest", "state": "MN", "school": "Gustavus Adolphus College", "city": "St. Peter", "conference": "MIAC", "coach": "Tyler Walsh", "email": "tmwalsh@gustavus.edu", "phone": "Not published on cited page", "notes": "", "source": "https://gogusties.com/sports/mens-ice-hockey/coaches"}, {"id": 77, "region": "Upper Midwest", "state": "MN", "school": "Hamline University", "city": "Saint Paul", "conference": "MIAC", "coach": "Shane Wagner", "email": "swagner10@hamline.edu", "phone": "651-523-2243", "notes": "", "source": "https://hamlineathletics.com/sports/mens-ice-hockey/coaches"}, {"id": 78, "region": "Upper Midwest", "state": "MN", "school": "Saint John's University", "city": "Collegeville", "conference": "MIAC", "coach": "Doug Schueller", "email": "dschueller@csbsju.edu", "phone": "363-2242", "notes": "Phone published without area code", "source": "https://gojohnnies.com/sports/mens-ice-hockey/coaches"}, {"id": 79, "region": "Upper Midwest", "state": "MN", "school": "St. Mary’s University", "city": "Winona", "conference": "MIAC", "coach": "Ryan Egan", "email": "regan@smumn.edu", "phone": "507-457-1577", "notes": "", "source": "https://saintmaryssports.com/sports/mens-ice-hockey/coaches"}, {"id": 80, "region": "Upper Midwest", "state": "MN", "school": "St. Olaf College", "city": "Northfield", "conference": "MIAC", "coach": "Tyler Lindstrom", "email": "lindst6@stolaf.edu", "phone": "(507) 786-3456", "notes": "", "source": "https://athletics.stolaf.edu/sports/mens-ice-hockey/coaches"}, {"id": 81, "region": "Upper Midwest", "state": "MN", "school": "St. Scholastica", "city": "Duluth", "conference": "MIAC", "coach": "Brenden Kotyk", "email": "bkotyk@css.edu", "phone": "Not published on cited page", "notes": "", "source": "https://csssaints.com/sports/mens-ice-hockey/coaches"}, {"id": 82, "region": "Upper Midwest", "state": "WI", "school": "Beloit College", "city": "Beloit", "conference": "WIAC", "coach": "Shane Buckley", "email": "buckleys@beloit.edu", "phone": "715-661-4378", "notes": "", "source": "https://beloitcollegeathletics.com/sports/mens-hockey/coaches"}, {"id": 83, "region": "Upper Midwest", "state": "WI", "school": "Concordia University Wisconsin", "city": "Mequon", "conference": "NCHA", "coach": "Jim Mosso", "email": "jim.mosso@cuw.edu", "phone": "262-243-2011", "notes": "", "source": "https://cuwfalcons.com/sports/mens-ice-hockey/coaches"}, {"id": 84, "region": "Upper Midwest", "state": "WI", "school": "Lawrence University", "city": "Appleton", "conference": "NCHA", "coach": "Rylee Orr", "email": "rylee.orr@lawrence.edu", "phone": "920-832-7348", "notes": "", "source": "https://vikings.lawrence.edu/sports/mens-ice-hockey/coaches"}, {"id": 85, "region": "Upper Midwest", "state": "WI", "school": "Marian University", "city": "Fond du Lac", "conference": "NCHA", "coach": "Clay Van Diest", "email": "cpvandiest97@marianuniversity.edu", "phone": "920-923-8594", "notes": "", "source": "https://sabreathletics.com/sports/mens-ice-hockey/coaches"}, {"id": 86, "region": "Upper Midwest", "state": "WI", "school": "Milwaukee School of Engineering", "city": "Milwaukee", "conference": "NCHA", "coach": "Brandon Richards", "email": "richards@msoe.edu", "phone": "(414) 331-4926", "notes": "", "source": "https://msoeraiders.com/sports/mens-ice-hockey/coaches"}, {"id": 87, "region": "Upper Midwest", "state": "WI", "school": "St. Norbert College", "city": "De Pere", "conference": "NCHA", "coach": "Tim Coghlin", "email": "tim.coghlin@snc.edu", "phone": "920-403-2025", "notes": "", "source": "https://athletics.snc.edu/sports/mens-ice-hockey/coaches"}, {"id": 88, "region": "Upper Midwest", "state": "WI", "school": "UW–Eau Claire", "city": "Eau Claire", "conference": "WIAC", "coach": "Matt Loen", "email": "loenmj@uwec.edu", "phone": "(715) 836-4516", "notes": "", "source": "https://blugolds.com/sports/mens-ice-hockey/coaches"}, {"id": 89, "region": "Upper Midwest", "state": "WI", "school": "UW–River Falls", "city": "River Falls", "conference": "WIAC", "coach": "Steve Freeman", "email": "steven.c.freeman@uwrf.edu", "phone": "715-425-3252", "notes": "", "source": "https://uwrfsports.com/sports/mens-ice-hockey/coaches"}, {"id": 90, "region": "Upper Midwest", "state": "WI", "school": "UW–Stevens Point", "city": "Stevens Point", "conference": "WIAC", "coach": "Tyler Krueger", "email": "Tyler.Krueger@uwsp.edu", "phone": "715-346-3067", "notes": "", "source": "https://athletics.uwsp.edu/sports/mens-ice-hockey/coaches"}, {"id": 91, "region": "Upper Midwest", "state": "WI", "school": "UW–Stout", "city": "Menomonie", "conference": "WIAC", "coach": "Mike MacDonald", "email": "macdonaldm@uwstout.edu", "phone": "715-232-1258", "notes": "", "source": "https://stoutbluedevils.com/sports/mens-ice-hockey/coaches"}, {"id": 92, "region": "Upper Midwest", "state": "WI", "school": "UW–Superior", "city": "Superior", "conference": "WIAC", "coach": "Rich McKenna", "email": "rmckenna@uwsuper.edu", "phone": "715-394-8362", "notes": "", "source": "https://uwsyellowjackets.com/sports/mens-ice-hockey/coaches"}];
+const STEPS=[["Prepare a player profile", "Include name, birth year, position, shooting hand, height and weight, current team and league, graduation year, intended college entry year, GPA, intended major, statistics, highlight video, full-game video and current coach contact. State any prior full-time college enrollment."], ["Email the coach directly", "Send a separate, personalized email to each coach. Ask for a recruiting evaluation and whether the program needs his position in his intended entry year. Use the published email on each program card."], ["Complete the questionnaire", "Open the official contact page and look for Recruit Me, Recruit Form or recruiting questionnaires. If a form is not easy to find, ask the coach for the current men’s hockey questionnaire."], ["Ask about evaluation options", "Ask which prospect camps or showcases the coach will attend and how the staff prefers to review game film. A camp registration does not imply a roster offer or a guaranteed evaluation by the head coach."], ["Clarify the walk-on policy", "NCAA Division III schools cannot hold practice tryouts for prospective college-bound students. Ask whether enrolled students can try out, what admission/enrollment and medical requirements apply, and whether the coach realistically sees a potential roster fit."], ["Follow up", "Send one short follow-up after 7–10 days with a recent game clip or schedule. If there is still no reply, call the listed hockey office and ask how to reach the recruiting staff."], ["Check eligibility and cost", "Have the school’s compliance staff review any junior hockey, delayed enrollment, prior college attendance, major junior or professional history. If treated as an international student-athlete, NCAA athletics certification may be required. Division III does not offer athletic scholarships. Ask admissions about academic and need-based aid."]];
+const EMAIL_TEMPLATE="Subject: [Entry year] prospect | [Position] | [Name] | [Current team/league]\n\nCoach [Last name],\n\nMy name is [Name], a [birth year] [position] playing for [team] in [league]. I am interested in [school] for [entry year], particularly [specific academic or hockey reason].\n\nI am [height/weight], shoot [left/right], and have [brief statistics]. My GPA is [GPA], and I am interested in studying [major]. My graduation year is [year], and my current college enrollment status is [status].\n\nHighlights: [link]. Full-game video: [link, jersey number and color]. Statistics: [link]. Current coach: [name, email and phone].\n\nAre you recruiting my position for [entry year], and would you be willing to review my film? Please let me know the best route to be evaluated, any prospect camps you recommend, and whether your program offers a walk-on opportunity for enrolled students.\n\nThank you, [Name] | [Phone] | [Email]";
+
+/* ---------- Status config ---------- */
+const STATUSES=[
+ {v:"not-started",l:"Not started",c:"#6c7f91"},
+ {v:"researching",l:"Researching",c:"#5b86b8"},
+ {v:"emailed",l:"Email sent",c:"#3aa0ff"},
+ {v:"questionnaire",l:"Questionnaire done",c:"#8a7dff"},
+ {v:"replied",l:"Replied",c:"#2bc5c0"},
+ {v:"evaluating",l:"Evaluating / film",c:"#f0a93b"},
+ {v:"camp",l:"Camp / visit",c:"#c06bff"},
+ {v:"strong",l:"Strong interest",c:"#3ecf7a"},
+ {v:"notfit",l:"Not a fit",c:"#e06060"},
+ {v:"committed",l:"Committed",c:"#ffcf4d"},
+];
+const ST=Object.fromEntries(STATUSES.map(s=>[s.v,s]));
+
+/* ---------- Persistence ---------- */
+const KEY="hockeyCRM_v1";
+let store=JSON.parse(localStorage.getItem(KEY)||"{}");
+function save(){localStorage.setItem(KEY,JSON.stringify(store));}
+function rec(id){
+  if(!store[id]) store[id]={status:"not-started",star:false,lastContact:"",followUp:"",checklist:[],notes:[]};
+  const r=store[id];
+  r.checklist=r.checklist||[]; r.notes=r.notes||[];
+  return r;
+}
+function merged(){
+  return PROGRAMS.map(p=>({...p,...rec(p.id)}));
+}
+
+/* ---------- Helpers ---------- */
+const $=s=>document.querySelector(s);
+const esc=s=>(s==null?"":String(s)).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function pill(v){const s=ST[v]||ST["not-started"];return `<span class="pill" style="background:${s.c}22;color:${s.c};border:1px solid ${s.c}55">${s.l}</span>`;}
+function today(){const d=new Date();return d.toISOString().slice(0,10);}
+function dayDiff(d){if(!d)return null;const a=new Date(d+"T00:00:00"),b=new Date(today()+"T00:00:00");return Math.round((a-b)/86400000);}
+function fuClass(d){const n=dayDiff(d);if(n==null)return"";if(n<0)return"over";if(n<=7)return"soon";return"";}
+function fuLabel(d){const n=dayDiff(d);if(n==null)return"";if(n<0)return`${-n}d overdue`;if(n===0)return"Today";if(n===1)return"Tomorrow";if(n<=7)return`In ${n}d`;return d;}
+let toastT;
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove("show"),1900);}
+
+/* ---------- Tabs ---------- */
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".tabs button").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+  $("#view-"+b.dataset.view).classList.add("active");
+  if(b.dataset.view==="dash")renderDash();
+});
+
+/* ---------- Dashboard ---------- */
+function renderDash(){
+  const all=merged();
+  const n=all.length;
+  const contacted=all.filter(p=>!["not-started","researching"].includes(p.status)).length;
+  const replied=all.filter(p=>["replied","evaluating","camp","strong","committed"].includes(p.status)).length;
+  const strong=all.filter(p=>["strong","committed"].includes(p.status)).length;
+  const due=all.filter(p=>p.followUp&&dayDiff(p.followUp)<=7).length;
+  $("#statCards").innerHTML=`
+    <div class="stat"><div class="n">${n}</div><div class="l">Programs</div></div>
+    <div class="stat"><div class="n">${contacted}</div><div class="l">Contacted</div></div>
+    <div class="stat"><div class="n">${replied}</div><div class="l">Replied / active</div></div>
+    <div class="stat hl"><div class="n">${strong}</div><div class="l">Strong interest</div></div>
+    <div class="stat warn"><div class="n">${due}</div><div class="l">Follow-ups due</div></div>`;
+
+  const fu=all.filter(p=>p.followUp).sort((a,b)=>a.followUp.localeCompare(b.followUp));
+  $("#followList").innerHTML=fu.length?fu.map(p=>`
+    <div class="fu-item" data-id="${p.id}">
+      <span>${esc(p.school)}</span>
+      <span class="when ${fuClass(p.followUp)}">${fuLabel(p.followUp)}</span>
+    </div>`).join(""):'<div class="empty">No follow-ups scheduled yet.</div>';
+
+  const counts={};STATUSES.forEach(s=>counts[s.v]=0);
+  all.forEach(p=>counts[p.status]=(counts[p.status]||0)+1);
+  const max=Math.max(1,...Object.values(counts));
+  $("#statusBreak").innerHTML=STATUSES.map(s=>`
+    <div class="sbar">
+      <span class="dot" style="background:${s.c}"></span>
+      <span style="width:118px;color:var(--muted)">${s.l}</span>
+      <span class="track"><span class="fill" style="width:${counts[s.v]/max*100}%;background:${s.c}"></span></span>
+      <span class="c">${counts[s.v]}</span>
+    </div>`).join("");
+
+  const acts=[];
+  all.forEach(p=>(p.notes||[]).forEach(nt=>acts.push({school:p.school,id:p.id,...nt})));
+  acts.sort((a,b)=>b.ts-a.ts);
+  $("#recentAct").innerHTML=acts.length?acts.slice(0,6).map(a=>`
+    <div class="fu-item" data-id="${a.id}">
+      <span><strong>${esc(a.school)}</strong> &mdash; ${esc(a.text).slice(0,90)}</span>
+      <span class="when">${new Date(a.ts).toLocaleDateString()}</span>
+    </div>`).join(""):'<div class="empty">No notes logged yet. Open a program to add one.</div>';
+
+  document.querySelectorAll(".fu-item[data-id]").forEach(el=>el.onclick=()=>openModal(+el.dataset.id));
+}
+
+/* ---------- Programs table ---------- */
+let sortKey="school",sortDir=1;
+function renderTable(){
+  const q=$("#search").value.toLowerCase().trim();
+  const fR=$("#fRegion").value,fC=$("#fConf").value,fS=$("#fStatus").value;
+  const fStar=$("#fStar").checked,fFollow=$("#fFollow").checked;
+  let rows=merged().filter(p=>{
+    if(fR&&p.region!==fR)return false;
+    if(fC&&p.conference!==fC)return false;
+    if(fS&&p.status!==fS)return false;
+    if(fStar&&!p.star)return false;
+    if(fFollow&&!(p.followUp&&dayDiff(p.followUp)<=7))return false;
+    if(q){const hay=(p.school+" "+p.coach+" "+p.city+" "+p.state+" "+p.conference).toLowerCase();if(!hay.includes(q))return false;}
+    return true;
+  });
+  rows.sort((a,b)=>{
+    let x=a[sortKey]||"",y=b[sortKey]||"";
+    if(sortKey==="status"){x=ST[x]?.l||x;y=ST[y]?.l||y;}
+    return (x<y?-1:x>y?1:0)*sortDir;
+  });
+  $("#countLine").textContent=`${rows.length} program${rows.length!==1?"s":""} shown`;
+  $("#progBody").innerHTML=rows.map(p=>`
+    <tr data-id="${p.id}">
+      <td><div class="sch">${p.star?'<span class="star">&#9733;</span> ':""}${esc(p.school)}</div><div class="sub2">${esc(p.city)}, ${esc(p.state)}</div></td>
+      <td>${esc(p.region)}</td>
+      <td><span class="tag">${esc(p.conference)}</span></td>
+      <td>${esc(p.coach||"&mdash;")}</td>
+      <td>${pill(p.status)}</td>
+      <td>${p.lastContact?esc(p.lastContact):'<span class="sub2">&mdash;</span>'}</td>
+      <td class="fu-cell ${fuClass(p.followUp)}">${p.followUp?fuLabel(p.followUp):'<span class="sub2">&mdash;</span>'}</td>
+    </tr>`).join("");
+  document.querySelectorAll("#progBody tr").forEach(tr=>tr.onclick=()=>openModal(+tr.dataset.id));
+}
+
+/* ---------- Modal ---------- */
+let curId=null;
+function openModal(id){
+  curId=id;
+  const p=PROGRAMS.find(x=>x.id===id),r=rec(id);
+  const stepsHtml=STEPS.map((s,i)=>`
+    <label class="check ${r.checklist[i]?"done":""}">
+      <input type="checkbox" data-ck="${i}" ${r.checklist[i]?"checked":""}>
+      <span><span class="ct">${i+1}. ${esc(s[0])}</span><br><span class="cd">${esc(s[1])}</span></span>
+    </label>`).join("");
+  const notesHtml=(r.notes||[]).slice().reverse().map(nt=>`
+    <div class="logitem">
+      <div class="ts"><span>${new Date(nt.ts).toLocaleString()}</span><button class="del" data-delts="${nt.ts}">delete</button></div>
+      <div>${esc(nt.text)}</div>
+    </div>`).join("")||'<div class="empty">No notes yet.</div>';
+  const mailto=p.email?`mailto:${p.email}?subject=${encodeURIComponent("Prospect inquiry — "+p.school)}&body=${encodeURIComponent(EMAIL_TEMPLATE)}`:"#";
+  $("#modal").innerHTML=`
+    <div class="mhead">
+      <div><h2>${esc(p.school)}</h2><div class="meta">${esc(p.city)}, ${esc(p.state)} &middot; ${esc(p.region)} &middot; ${esc(p.conference)}</div></div>
+      <button class="x" id="closeX">&times;</button>
+    </div>
+    <div class="mbody">
+      <div class="contactrow">
+        <div><span class="k">Coach:</span> <strong>${esc(p.coach||"—")}</strong></div>
+        ${p.email?`<div><span class="k">Email:</span> <a href="mailto:${esc(p.email)}">${esc(p.email)}</a></div>`:""}
+        ${p.phone?`<div><span class="k">Phone:</span> ${esc(p.phone)}</div>`:""}
+        ${p.source?`<div><span class="k">Page:</span> <a href="${esc(p.source)}" target="_blank" rel="noopener">Official contact page &#8599;</a></div>`:""}
+      </div>
+      ${p.notes?`<div class="note-src">Directory note: ${esc(p.notes)}</div>`:""}
+      <div class="fieldgrid">
+        <div class="field"><label>Status</label><select id="fieldStatus">${STATUSES.map(s=>`<option value="${s.v}" ${r.status===s.v?"selected":""}>${s.l}</option>`).join("")}</select></div>
+        <div class="field"><label>Last contact</label><input type="date" id="fieldLast" value="${r.lastContact||""}"></div>
+        <div class="field"><label>Follow-up date</label><input type="date" id="fieldFollow" value="${r.followUp||""}"></div>
+      </div>
+      <div class="btnrow">
+        <button class="togstar ${r.star?"on":""}" id="starBtn">${r.star?"&#9733; Starred":"&#9734; Star this school"}</button>
+        <a class="btn ghost sm" href="${mailto}" ${p.email?"":'style="pointer-events:none;opacity:.5"'}>&#9993; Draft email to coach</a>
+      </div>
+      <div class="block">
+        <h4>Recruiting checklist</h4>
+        ${stepsHtml}
+      </div>
+      <div class="block">
+        <h4>Notes &amp; follow-up log</h4>
+        <textarea id="noteInput" placeholder="Log a call, email, reply, next step&hellip;"></textarea>
+        <div class="btnrow" style="margin-top:9px"><button class="btn sm" id="addNote">Add note</button></div>
+        <div style="margin-top:14px" id="noteLog">${notesHtml}</div>
+      </div>
+    </div>`;
+  $("#modalBg").classList.add("show");
+  document.body.style.overflow="hidden";
+
+  $("#closeX").onclick=closeModal;
+  $("#fieldStatus").onchange=e=>{rec(id).status=e.target.value;save();};
+  $("#fieldLast").onchange=e=>{rec(id).lastContact=e.target.value;save();};
+  $("#fieldFollow").onchange=e=>{rec(id).followUp=e.target.value;save();};
+  $("#starBtn").onclick=()=>{const rr=rec(id);rr.star=!rr.star;save();openModal(id);};
+  document.querySelectorAll("[data-ck]").forEach(cb=>cb.onchange=()=>{
+    rec(id).checklist[+cb.dataset.ck]=cb.checked;save();
+    cb.closest(".check").classList.toggle("done",cb.checked);
+  });
+  $("#addNote").onclick=()=>{
+    const v=$("#noteInput").value.trim();if(!v)return;
+    rec(id).notes.push({ts:Date.now(),text:v});
+    if(!rec(id).lastContact)rec(id).lastContact=today();
+    save();openModal(id);
+  };
+  document.querySelectorAll("[data-delts]").forEach(b=>b.onclick=()=>{
+    const ts=+b.dataset.delts;rec(id).notes=rec(id).notes.filter(n=>n.ts!==ts);save();openModal(id);
+  });
+}
+function closeModal(){$("#modalBg").classList.remove("show");document.body.style.overflow="";curId=null;renderTable();}
+$("#modalBg").onclick=e=>{if(e.target===$("#modalBg"))closeModal();};
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&curId!=null)closeModal();});
+
+/* ---------- Filters wiring ---------- */
+function fillSelect(sel,vals){vals.forEach(v=>{const o=document.createElement("option");o.value=v;o.textContent=v;sel.appendChild(o);});}
+fillSelect($("#fRegion"),[...new Set(PROGRAMS.map(p=>p.region))].sort());
+fillSelect($("#fConf"),[...new Set(PROGRAMS.map(p=>p.conference))].sort());
+STATUSES.forEach(s=>{const o=document.createElement("option");o.value=s.v;o.textContent=s.l;$("#fStatus").appendChild(o);});
+["search","fRegion","fConf","fStatus"].forEach(id=>$("#"+id).addEventListener("input",renderTable));
+["fStar","fFollow"].forEach(id=>$("#"+id).addEventListener("change",renderTable));
+document.querySelectorAll("th[data-sort]").forEach(th=>th.onclick=()=>{
+  const k=th.dataset.sort;if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=1;}renderTable();
+});
+
+/* ---------- Guide ---------- */
+$("#stepsWrap").innerHTML=STEPS.map((s,i)=>`
+  <div class="guide-step"><div class="num">${i+1}</div><div><h4>${esc(s[0])}</h4><p>${esc(s[1])}</p></div></div>`).join("");
+$("#tmplBox").textContent=EMAIL_TEMPLATE;
+$("#copyTmpl").onclick=()=>{navigator.clipboard.writeText(EMAIL_TEMPLATE).then(()=>toast("Email template copied"));};
+
+/* ---------- Export / Import ---------- */
+$("#exportBtn").onclick=()=>{
+  const blob=new Blob([JSON.stringify(store,null,2)],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);
+  a.download="hockey-crm-"+today()+".json";a.click();toast("Backup downloaded");
+};
+$("#importBtn").onclick=()=>$("#importFile").click();
+$("#importFile").onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  const rd=new FileReader();
+  rd.onload=()=>{try{const data=JSON.parse(rd.result);store=data;save();toast("Data imported");renderTable();renderDash();}
+    catch(err){toast("Could not read that file");}};
+  rd.readAsText(f);e.target.value="";
+};
+
+/* ---------- Init ---------- */
+renderDash();
+renderTable();
+</script>
+</body>
+</html>
